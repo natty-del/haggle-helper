@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a1628">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>HaggleHelper</title>
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a1628;
+            --bg-secondary: #1a2942;
+            --text-primary: #ffffff;
+            --text-secondary: #a8b8d8;
+            --accent-primary: #ff6b35;
+            --accent-secondary: #ffd23f;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+        }
+
+        /* Swipe Container */
+        .swipe-container {
+            height: 100vh;
+            width: 300vw;
+            display: flex;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            touch-action: pan-y;
+        }
+
+        .screen {
+            width: 100vw;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .screen-content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1rem;
+            padding-bottom: 100px; /* Space for bottom nav */
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.5rem 0 1rem 0;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex: 1;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--card-border);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 2rem;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0.5;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* SCAN SCREEN */
+        .scan-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 16px;
+            padding: 2rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--bg-primary);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }
+
+        .scan-icon {
+            font-size: 3rem;
+        }
+
+        .location-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 0.875rem;
+            font-size: 1rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .recent-scans {
+            margin-top: 2rem;
+        }
+
+        .recent-scan-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+
+        .scan-item-name {
+            font-weight: 600;
+        }
+
+        .scan-item-price {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .scan-item-savings {
+            color: #4ade80;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* LEADERBOARD SCREEN */
+        .leaderboard-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--bg-primary);
+        }
+
+        .leaderboard-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .leaderboard-item.you {
+            background: rgba(255, 107, 53, 0.15);
+            border-color: rgba(255, 107, 53, 0.3);
+        }
+
+        .rank {
+            font-size: 1.2rem;
+            min-width: 40px;
+            font-weight: 700;
+        }
+
+        .leaderboard-info {
+            flex: 1;
+        }
+
+        .leaderboard-name {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .leaderboard-stats {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .leaderboard-arrow {
+            font-size: 1.5rem;
+        }
+
+        /* PROFILE SCREEN */
+        .profile-header {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1rem auto;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-edit {
+            font-size: 0.9rem;
+            color: var(--accent-primary);
+            cursor: pointer;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .badges-section {
+            margin-top: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .badge-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .badge-item.locked {
+            opacity: 0.3;
+        }
+
+        /* Loading & Error States */
+        .loading, .error {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Result Overlay */
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .result-content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .close-result {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+    <!-- Swipe Container with 3 Screens -->
+    <div class="swipe-container" id="swipeContainer">
+        
+        <!-- SCREEN 1: LEADERBOARD -->
+        <div class="screen" id="leaderboardScreen">
+            <div class="screen-content">
+                <div class="header">
+                    <div class="logo">💰</div>
+                    <h1>Leaderboards</h1>
+                </div>
+
+                <div class="leaderboard-tabs">
+                    <button class="tab-btn active" data-tab="volume">📊 Most Active</button>
+                    <button class="tab-btn" data-tab="deals">💎 Best Deals</button>
+                </div>
+
+                <div id="leaderboardContent">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: SCAN (HOME) -->
+        <div class="screen" id="scanScreen">
+            <div class="screen-content">
+                <div class="header">
+                    <div class="logo" id="logoTap">💰</div>
+                    <h1>HaggleHelper</h1>
+                </div>
+
+                <input 
+                    type="text" 
+                    id="locationInput" 
+                    class="location-input" 
+                    placeholder="📍 Location (e.g., Hanoi Old Quarter)"
+                >
+
+                <button class="scan-btn" id="scanBtn">
+                    <div class="scan-icon">📸</div>
+                    <div>SCAN ITEM</div>
+                </button>
+
+                <div class="recent-scans">
+                    <div class="section-title">Recent Scans</div>
+                    <div id="recentScansList">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: PROFILE -->
+        <div class="screen" id="profileScreen">
+            <div class="screen-content">
+                <div class="header">
+                    <h1>Profile</h1>
+                    <div class="header-icon" id="settingsBtn">⚙️</div>
+                </div>
+
+                <div class="profile-header">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-name" id="profileName">Anonymous</div>
+                    <div class="profile-edit" id="editNameBtn">Tap to set username</div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalScans">0</div>
+                        <div class="stat-label">Total Scans</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="bestDeal">--</div>
+                        <div class="stat-label">Best Deal</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgSavings">--</div>
+                        <div class="stat-label">Avg Savings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="currentStreak">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                </div>
+
+                <div class="badges-section">
+                    <div class="section-title">🏅 Badges <span style="opacity: 0.5;">(3/12)</span></div>
+                    <div class="badges-grid">
+                        <div class="badge-item">
+                            <div class="badge-icon">🌱</div>
+                            <div class="badge-name">First Scan</div>
+                        </div>
+                        <div class="badge-item locked">
+                            <div class="badge-icon">🎯</div>
+                            <div class="badge-name">5 Scans</div>
+                        </div>
+                        <div class="badge-item locked">
+                            <div class="badge-icon">💪</div>
+                            <div class="badge-name">10 Scans</div>
+                        </div>
+                        <div class="badge-item locked">
+                            <div class="badge-icon">🏆</div>
+                            <div class="badge-name">25 Scans</div>
+                        </div>
+                        <div class="badge-item locked">
+                            <div class="badge-icon">👑</div>
+                            <div class="badge-name">50 Scans</div>
+                        </div>
+                        <div class="badge-item locked">
+                            <div class="badge-icon">🌟</div>
+                            <div class="badge-name">100 Scans</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 3rem; padding: 2rem; opacity: 0.5;">
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                        Admin Mode: <span id="adminStatus">OFF</span>
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                        Triple-tap logo to toggle
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item" data-screen="0">
+            <div class="nav-icon">🏆</div>
+            <div class="nav-label">Leaders</div>
+        </div>
+        <div class="nav-item active" data-screen="1">
+            <div class="nav-icon">📸</div>
+            <div class="nav-label">Scan</div>
+        </div>
+        <div class="nav-item" data-screen="2">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Profile</div>
+        </div>
+    </div>
+
+    <!-- Hidden Camera Input -->
+    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;">
+
+    <!-- Loading Indicator -->
+    <div id="loading" class="loading hidden">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">⏳</div>
+        <div>Analyzing item...</div>
+    </div>
+
+    <!-- Error Display -->
+    <div id="error" class="error hidden"></div>
+
+    <!-- Result Overlay -->
+    <div id="resultOverlay" class="result-overlay hidden">
+        <button class="close-result" id="closeResult">✕</button>
+        <div class="result-content" id="resultContent">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Firebase & App Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBXxl1C_XpAH_IMuTKGIGXw6zm7TpUjYQc",
+            authDomain: "haggle-helper-4eaee.firebaseapp.com",
+            projectId: "haggle-helper-4eaee",
+            storageBucket: "haggle-helper-4eaee.firebasestorage.app",
+            messagingSenderId: "367863876356",
+            appId: "1:367863876356:web:a5f54af19c8c5e5f8e0d3a"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // State
+        let currentScreen = 1; // Start on Scan screen
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let userId = getUserId();
+        let userName = localStorage.getItem('username') || null;
+        let adminMode = false;
+        let logoTapCount = 0;
+        let logoTapTimer = null;
+        let currentItemData = null;
+        let currentLocation = '';
+        let currentCoords = null;
+        let recentScans = JSON.parse(localStorage.getItem('recentScans') || '[]');
+
+        // Fake leaders
+        const fakeLeaders = [
+            { id: 'fake_1', name: 'BackpackerMike', count: 47, avgSavings: -38, badge: '🌏', isFake: true },
+            { id: 'fake_2', name: 'HanoiHunter', count: 32, avgSavings: -52, badge: '🎯', isFake: true },
+            { id: 'fake_3', name: 'BudgetTraveler', count: 28, avgSavings: -29, badge: '💰', isFake: true },
+            { id: 'fake_4', name: 'MarketMaven', count: 23, avgSavings: -45, badge: '🛍️', isFake: true },
+            { id: 'fake_5', name: 'DealSeeker', count: 19, avgSavings: -41, badge: '🔍', isFake: true },
+            { id: 'fake_6', name: 'PriceWatcher', count: 16, avgSavings: -33, badge: '👀', isFake: true },
+            { id: 'fake_7', name: 'SavvyShopper', count: 14, avgSavings: -48, badge: '🧠', isFake: true },
+            { id: 'fake_8', name: 'Nomad_Sarah', count: 11, avgSavings: -36, badge: '✈️', isFake: true },
+            { id: 'fake_9', name: 'DealMaster', count: 9, avgSavings: -67, badge: '👑', isFake: true },
+            { id: 'fake_10', name: 'NewScout', count: 7, avgSavings: -25, badge: '🆕', isFake: true }
+        ];
+
+        // Helper Functions
+        function getUserId() {
+            let id = localStorage.getItem('userId');
+            if (!id) {
+                id = 'user_' + Math.random().toString(36).substring(2, 15);
+                localStorage.setItem('userId', id);
+            }
+            return id;
+        }
+
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return Math.abs(hash).toString(36);
+        }
+
+        // Swipe Navigation
+        const swipeContainer = document.getElementById('swipeContainer');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        function goToScreen(screenIndex) {
+            currentScreen = screenIndex;
+            swipeContainer.style.transform = `translateX(-${screenIndex * 100}vw)`;
+            
+            navItems.forEach((item, index) => {
+                item.classList.toggle('active', index === screenIndex);
+            });
+
+            // Load screen data when navigating
+            if (screenIndex === 0) loadLeaderboard('volume');
+            if (screenIndex === 2) loadProfileStats();
+        }
+
+        // Touch handling
+        swipeContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        swipeContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0 && currentScreen < 2) {
+                    // Swipe left (next screen)
+                    goToScreen(currentScreen + 1);
+                } else if (diff < 0 && currentScreen > 0) {
+                    // Swipe right (previous screen)
+                    goToScreen(currentScreen - 1);
+                }
+            }
+        }
+
+        // Nav item clicks
+        navItems.forEach((item, index) => {
+            item.addEventListener('click', () => goToScreen(index));
+        });
+
+        // Username editing
+        document.getElementById('editNameBtn').addEventListener('click', () => {
+            const newName = prompt('Enter your username:', userName || '');
+            if (newName && newName.trim()) {
+                userName = newName.trim();
+                localStorage.setItem('username', userName);
+                document.getElementById('profileName').textContent = userName;
+                document.getElementById('profileEdit').textContent = 'Tap to change';
+            }
+        });
+
+        // Admin mode (triple tap logo)
+        document.getElementById('logoTap').addEventListener('click', () => {
+            logoTapCount++;
+            
+            if (logoTapTimer) clearTimeout(logoTapTimer);
+            
+            logoTapTimer = setTimeout(() => {
+                logoTapCount = 0;
+            }, 1000);
+
+            if (logoTapCount === 3) {
+                adminMode = !adminMode;
+                document.getElementById('adminStatus').textContent = adminMode ? 'ON ✅' : 'OFF';
+                alert(adminMode ? '🔑 Admin Mode Enabled\n\nYour scans = Gold Standard data' : 'Admin Mode Disabled');
+                logoTapCount = 0;
+            }
+        });
+
+        // Scan button
+        document.getElementById('scanBtn').addEventListener('click', () => {
+            currentLocation = document.getElementById('locationInput').value || 'this area';
+            document.getElementById('cameraInput').click();
+        });
+
+        document.getElementById('cameraInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                await analyzeItem(event.target.result);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Analyze item
+        async function analyzeItem(imageData) {
+            document.getElementById('loading').classList.remove('hidden');
+
+            try {
+                const base64Data = imageData.split(',')[1];
+                
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        image: base64Data,
+                        location: currentLocation
+                    })
+                });
+
+                if (!response.ok) throw new Error('Analysis failed');
+
+                const result = await response.json();
+                result._photoHash = simpleHash(imageData.substring(0, 1000));
+                currentItemData = result;
+                
+                displayResult(result);
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('error').textContent = 'Could not analyze. Try again.';
+                document.getElementById('error').classList.remove('hidden');
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+            }
+        }
+
+        // Display result
+        function displayResult(data) {
+            const resultContent = document.getElementById('resultContent');
+            const estimatedMid = data.priceRange ? (data.priceRange.min + data.priceRange.max) / 2 : 0;
+
+            resultContent.innerHTML = `
+                <div style="padding: 2rem 1rem;">
+                    <h2 style="font-size: 1.8rem; margin-bottom: 1rem;">${data.item}</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">${data.description || ''}</p>
+
+                    <div class="card">
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Fair Price Range</div>
+                        <div style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">
+                            ${data.priceRange ? `${data.priceRange.min.toLocaleString()} - ${data.priceRange.max.toLocaleString()}` : 'N/A'}
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                            ${data.priceRange ? data.priceRange.currency : ''}
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Start Negotiating At</div>
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary);">
+                            ${data.suggestedStartingOffer ? data.suggestedStartingOffer.toLocaleString() : 'N/A'}
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.75rem;">💡 Haggling Tips</div>
+                        ${data.hagglingTips ? data.hagglingTips.map(tip => `<div style="margin-bottom: 0.5rem;">• ${tip}</div>`).join('') : ''}
+                    </div>
+
+                    <div class="card">
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.75rem;">What did you actually pay?</div>
+                        <input type="number" id="pricePaid" placeholder="Enter price" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 0.75rem; color: white; font-size: 1rem; margin-bottom: 1rem;">
+                        <button id="submitPrice" style="width: 100%; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border: none; border-radius: 8px; padding: 0.875rem; color: var(--bg-primary); font-weight: 700; cursor: pointer;">
+                            Submit Price
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('resultOverlay').classList.remove('hidden');
+
+            // Submit price handler
+            document.getElementById('submitPrice').addEventListener('click', async () => {
+                const price = parseFloat(document.getElementById('pricePaid').value);
+                if (!price || price <= 0) {
+                    alert('Please enter a valid price');
+                    return;
+                }
+
+                await saveToFirebase(price, data);
+                
+                // Add to recent scans
+                recentScans.unshift({
+                    item: data.item,
+                    price: price,
+                    savings: estimatedMid ? Math.round(((price - estimatedMid) / estimatedMid) * 100) : 0
+                });
+                recentScans = recentScans.slice(0, 5);
+                localStorage.setItem('recentScans', JSON.stringify(recentScans));
+                
+                document.getElementById('resultOverlay').classList.add('hidden');
+                alert('✅ Saved! Check the leaderboard!');
+                
+                updateRecentScans();
+                loadProfileStats();
+            });
+        }
+
+        document.getElementById('closeResult').addEventListener('click', () => {
+            document.getElementById('resultOverlay').classList.add('hidden');
+        });
+
+        // Save to Firebase
+        async function saveToFirebase(userPrice, itemData) {
+            try {
+                const now = new Date();
+                const estimatedMid = itemData.priceRange ? (itemData.priceRange.min + itemData.priceRange.max) / 2 : userPrice;
+
+                const submission = {
+                    timestamp: now.toISOString(),
+                    item_name: itemData.item,
+                    price_paid: userPrice,
+                    currency: itemData.priceRange?.currency || 'VND',
+                    estimated_min: itemData.priceRange?.min || null,
+                    estimated_max: itemData.priceRange?.max || null,
+                    data_source: adminMode ? 'admin' : 'user',
+                    data_tier: adminMode ? 'gold' : 'unverified',
+                    location_city: currentLocation,
+                    user_id: userId,
+                    username: userName || null,
+                    photo_hash: itemData._photoHash || null
+                };
+
+                await addDoc(collection(db, 'price_submissions'), submission);
+                console.log('✅ Saved to Firebase');
+            } catch (error) {
+                console.error('Firebase error:', error);
+            }
+        }
+
+        // Leaderboard
+        async function loadLeaderboard(type = 'volume') {
+            try {
+                const allSubmissions = await getDocs(collection(db, 'price_submissions'));
+                const userStats = {};
+                
+                allSubmissions.forEach(doc => {
+                    const data = doc.data();
+                    const uid = data.user_id;
+                    const name = data.username || (uid === userId ? 'YOU' : `User${uid.substring(5, 9)}`);
+                    
+                    if (!userStats[uid]) {
+                        userStats[uid] = {
+                            id: uid,
+                            name: name,
+                            count: 0,
+                            totalSavings: 0,
+                            validSavings: 0,
+                            isFake: false
+                        };
+                    }
+                    
+                    userStats[uid].count++;
+                    
+                    if (data.estimated_min && data.estimated_max && data.price_paid) {
+                        const estimatedMid = (data.estimated_min + data.estimated_max) / 2;
+                        const savingsPercent = ((data.price_paid - estimatedMid) / estimatedMid) * 100;
+                        userStats[uid].totalSavings += savingsPercent;
+                        userStats[uid].validSavings++;
+                    }
+                });
+                
+                Object.values(userStats).forEach(user => {
+                    user.avgSavings = user.validSavings > 0 ? Math.round(user.totalSavings / user.validSavings) : 0;
+                    user.badge = '📊';
+                });
+                
+                let allUsers = [...Object.values(userStats), ...fakeLeaders];
+                
+                if (type === 'volume') {
+                    allUsers.sort((a, b) => b.count - a.count);
+                } else {
+                    allUsers.sort((a, b) => a.avgSavings - b.avgSavings);
+                }
+                
+                allUsers = allUsers.map((user, index) => ({ ...user, rank: index + 1 }));
+                
+                displayLeaderboard(allUsers, type);
+                
+            } catch (error) {
+                console.error('Error loading leaderboard:', error);
+            }
+        }
+
+        function displayLeaderboard(users, type) {
+            const yourUser = users.find(u => u.name === 'YOU' || u.id === userId);
+            const top10 = users.slice(0, 10);
+            
+            let html = '';
+            
+            top10.forEach((user, index) => {
+                const isYou = user.name === 'YOU' || user.id === userId;
+                const rankEmoji = index === 0 ? '👑' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                const displayValue = type === 'volume' ? `${user.count} items` : `${user.avgSavings}% avg`;
+                
+                html += `
+                    <div class="leaderboard-item ${isYou ? 'you' : ''}">
+                        <div class="rank">${rankEmoji}</div>
+                        <div class="leaderboard-info">
+                            <div class="leaderboard-name">${isYou ? '🔥 ' : ''}${user.name}</div>
+                            <div class="leaderboard-stats">${user.badge} ${displayValue}</div>
+                        </div>
+                        ${isYou ? '<div class="leaderboard-arrow">⬆️</div>' : ''}
+                    </div>
+                `;
+            });
+            
+            if (yourUser && yourUser.rank > 10) {
+                html += `
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <div class="leaderboard-item you">
+                            <div class="rank">${yourUser.rank}.</div>
+                            <div class="leaderboard-info">
+                                <div class="leaderboard-name">🔥 YOU</div>
+                                <div class="leaderboard-stats">${yourUser.badge} ${type === 'volume' ? `${yourUser.count} items` : `${yourUser.avgSavings}% avg`}</div>
+                            </div>
+                            <div class="leaderboard-arrow">⬆️</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('leaderboardContent').innerHTML = html;
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                loadLeaderboard(e.target.dataset.tab);
+            });
+        });
+
+        // Profile stats
+        async function loadProfileStats() {
+            try {
+                const userSubmissions = await getDocs(
+                    query(collection(db, 'price_submissions'), where('user_id', '==', userId))
+                );
+
+                let totalScans = 0;
+                let bestDeal = 0;
+                let totalSavings = 0;
+                let validSavings = 0;
+
+                userSubmissions.forEach(doc => {
+                    const data = doc.data();
+                    totalScans++;
+
+                    if (data.estimated_min && data.estimated_max && data.price_paid) {
+                        const estimatedMid = (data.estimated_min + data.estimated_max) / 2;
+                        const savingsPercent = ((data.price_paid - estimatedMid) / estimatedMid) * 100;
+                        totalSavings += savingsPercent;
+                        validSavings++;
+
+                        if (savingsPercent < bestDeal) bestDeal = savingsPercent;
+                    }
+                });
+
+                document.getElementById('totalScans').textContent = totalScans;
+                document.getElementById('bestDeal').textContent = validSavings > 0 ? `${Math.round(bestDeal)}%` : '--';
+                document.getElementById('avgSavings').textContent = validSavings > 0 ? `${Math.round(totalSavings / validSavings)}%` : '--';
+                
+                if (userName) {
+                    document.getElementById('profileName').textContent = userName;
+                    document.getElementById('editNameBtn').textContent = 'Tap to change';
+                }
+
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Recent scans display
+        function updateRecentScans() {
+            const list = document.getElementById('recentScansList');
+            if (recentScans.length === 0) {
+                list.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 2rem;">No scans yet</div>';
+                return;
+            }
+
+            list.innerHTML = recentScans.map(scan => `
+                <div class="recent-scan-item">
+                    <div>
+                        <div class="scan-item-name">${scan.item}</div>
+                        <div class="scan-item-price">${scan.price.toLocaleString()} VND</div>
+                    </div>
+                    <div class="scan-item-savings">${scan.savings}%</div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        updateRecentScans();
+        loadProfileStats();
+        
+        // Auto-detect location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                currentCoords = {
+                    lat: position.coords.latitude,
+                    lon: position.coords.longitude
+                };
+            });
+        }
+    </script>
+</body>
+</html>
