@@ -449,6 +449,52 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, background-color 0.2s;
+            touch-action: pan-y;
+        }
+
+        .list-item.swiping-right {
+            background: rgba(76, 217, 100, 0.3);
+        }
+
+        .list-item.swiping-left {
+            background: rgba(255, 59, 48, 0.3);
+        }
+
+        .swipe-action {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .swipe-action.left {
+            left: 0;
+            background: rgba(255, 59, 48, 0.8);
+            color: white;
+        }
+
+        .swipe-action.right {
+            right: 0;
+            background: rgba(76, 217, 100, 0.8);
+            color: white;
+        }
+
+        .list-item.swiping-left .swipe-action.left {
+            opacity: 1;
+        }
+
+        .list-item.swiping-right .swipe-action.right {
+            opacity: 1;
         }
 
         .list-item-info {
@@ -543,6 +589,80 @@
             color: var(--bg-primary);
             font-weight: 700;
             cursor: pointer;
+        }
+
+        /* Price Modal */
+        .price-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 4000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .price-modal {
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .price-modal h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-modal .estimate {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .price-modal input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            color: white;
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .price-modal-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .price-modal-buttons button {
+            flex: 1;
+            padding: 0.875rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .save-price-btn {
+            background: linear-gradient(135deg, #4CD964, #34C759);
+            color: white;
+        }
+
+        .skip-price-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         /* Guides Section */
@@ -862,6 +982,11 @@
                 <!-- Shopping List Items -->
                 <div id="shoppingListItems">
                     <!-- Populated by JavaScript -->
+                </div>
+
+                <!-- Swipe Hint -->
+                <div id="swipeHint" style="text-align: center; padding: 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                    💡 Swipe right to mark bought • Swipe left to skip
                 </div>
 
                 <!-- Total -->
@@ -1437,6 +1562,11 @@
         function displayShoppingList() {
             const container = document.getElementById('shoppingListItems');
             
+            if (!container) {
+                console.error('Shopping list container not found');
+                return;
+            }
+            
             if (shoppingList.length === 0) {
                 container.innerHTML = `
                     <div class="empty-list">
@@ -1450,7 +1580,9 @@
             }
 
             container.innerHTML = shoppingList.map((item, index) => `
-                <div class="list-item">
+                <div class="list-item" data-index="${index}" id="item-${index}">
+                    <div class="swipe-action left">🚫 SKIP</div>
+                    <div class="swipe-action right">💰 BOUGHT</div>
                     <div class="list-item-info">
                         <div class="list-item-name">${item.name}</div>
                         <div class="list-item-price">
@@ -1459,12 +1591,74 @@
                                 : 'Getting price...'}
                         </div>
                     </div>
-                    <div class="list-item-remove" onclick="removeFromList(${index})">✕</div>
                 </div>
             `).join('');
 
+            // Add swipe listeners to each item
+            document.querySelectorAll('.list-item').forEach(itemEl => {
+                addSwipeListeners(itemEl);
+            });
+
             updateListTotal();
-            document.getElementById('listTotalSection').classList.remove('hidden');
+            const totalSection = document.getElementById('listTotalSection');
+            if (totalSection) {
+                totalSection.classList.remove('hidden');
+            }
+        }
+
+        function addSwipeListeners(element) {
+            let touchStartX = 0;
+            let touchEndX = 0;
+            let touchStartY = 0;
+            let touchEndY = 0;
+
+            element.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            });
+
+            element.addEventListener('touchmove', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
+                const diffX = touchEndX - touchStartX;
+                const diffY = Math.abs(touchEndY - touchStartY);
+
+                // Only swipe horizontally if not scrolling vertically
+                if (diffY < 30) {
+                    e.preventDefault();
+                    
+                    if (diffX > 50) {
+                        element.classList.add('swiping-right');
+                        element.classList.remove('swiping-left');
+                    } else if (diffX < -50) {
+                        element.classList.add('swiping-left');
+                        element.classList.remove('swiping-right');
+                    } else {
+                        element.classList.remove('swiping-left', 'swiping-right');
+                    }
+                }
+            });
+
+            element.addEventListener('touchend', (e) => {
+                const swipeThreshold = 100;
+                const diffX = touchEndX - touchStartX;
+                const diffY = Math.abs(touchEndY - touchStartY);
+
+                element.classList.remove('swiping-left', 'swiping-right');
+
+                // Only process if horizontal swipe (not vertical scroll)
+                if (diffY < 30 && Math.abs(diffX) > swipeThreshold) {
+                    const index = parseInt(element.dataset.index);
+                    
+                    if (diffX > 0) {
+                        // Swipe RIGHT → Bought (show price modal)
+                        showPriceModal(index);
+                    } else {
+                        // Swipe LEFT → Skip (instant removal)
+                        skipListItem(index);
+                    }
+                }
+            });
         }
 
         async function addItemToList(itemName) {
@@ -1474,7 +1668,8 @@
             shoppingList.push({
                 name: itemName.trim(),
                 estimateMin: null,
-                estimateMax: null
+                estimateMax: null,
+                status: 'pending'
             });
 
             saveList();
@@ -1508,7 +1703,128 @@
             }
         }
 
+        function showPriceModal(index) {
+            const item = shoppingList[index];
+            if (!item) return;
+
+            const midEstimate = item.estimateMin && item.estimateMax 
+                ? Math.round((item.estimateMin + item.estimateMax) / 2)
+                : 0;
+
+            const modalHTML = `
+                <div class="price-modal-overlay" id="priceModalOverlay">
+                    <div class="price-modal">
+                        <h3>${item.name}</h3>
+                        <div class="estimate">Est: ${item.estimateMin?.toLocaleString() || '?'} - ${item.estimateMax?.toLocaleString() || '?'} VND</div>
+                        
+                        <input type="number" 
+                            id="priceInput" 
+                            value="${midEstimate}"
+                            inputmode="numeric"
+                            placeholder="Price paid">
+                        
+                        <div class="price-modal-buttons">
+                            <button class="save-price-btn" onclick="savePricePaid(${index})">✓ Save Price</button>
+                            <button class="skip-price-btn" onclick="skipPriceEntry(${index})">→ Skip</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            // Auto-select input for quick edit
+            setTimeout(() => {
+                const input = document.getElementById('priceInput');
+                if (input) input.select();
+            }, 100);
+        }
+
+        function savePricePaid(index) {
+            const input = document.getElementById('priceInput');
+            const price = input ? parseFloat(input.value) : null;
+            
+            markItemBought(index, price);
+            closePriceModal();
+        }
+
+        function skipPriceEntry(index) {
+            markItemBought(index, null); // Bought but no price
+            closePriceModal();
+        }
+
+        function closePriceModal() {
+            const modal = document.getElementById('priceModalOverlay');
+            if (modal) modal.remove();
+        }
+
+        async function markItemBought(index, pricePaid) {
+            const item = shoppingList[index];
+            if (!item) return;
+
+            // Save to Firebase as bought
+            try {
+                await addDoc(collection(db, 'shopping_sessions'), {
+                    timestamp: new Date().toISOString(),
+                    user_id: userId,
+                    location_city: currentLocation,
+                    item_name: item.name,
+                    estimate_min: item.estimateMin,
+                    estimate_max: item.estimateMax,
+                    status: 'bought',
+                    price_paid: pricePaid,
+                    scan_source: 'shopping_list'
+                });
+            } catch (error) {
+                console.error('Firebase save error:', error);
+            }
+
+            // Remove from list
+            shoppingList.splice(index, 1);
+            saveList();
+            displayShoppingList();
+        }
+
+        async function skipListItem(index) {
+            const item = shoppingList[index];
+            if (!item) return;
+
+            // Save to Firebase as skipped
+            try {
+                await addDoc(collection(db, 'shopping_sessions'), {
+                    timestamp: new Date().toISOString(),
+                    user_id: userId,
+                    location_city: currentLocation,
+                    item_name: item.name,
+                    estimate_min: item.estimateMin,
+                    estimate_max: item.estimateMax,
+                    status: 'skipped',
+                    price_paid: null,
+                    scan_source: 'shopping_list'
+                });
+            } catch (error) {
+                console.error('Firebase save error:', error);
+            }
+
+            // Remove from list with animation
+            const element = document.getElementById(`item-${index}`);
+            if (element) {
+                element.style.transform = 'translateX(-120%)';
+                element.style.opacity = '0';
+                setTimeout(() => {
+                    shoppingList.splice(index, 1);
+                    saveList();
+                    displayShoppingList();
+                }, 200);
+            } else {
+                shoppingList.splice(index, 1);
+                saveList();
+                displayShoppingList();
+            }
+        }
+
         function removeFromList(index) {
+            // Old function for manual remove (if needed)
             shoppingList.splice(index, 1);
             saveList();
             displayShoppingList();
@@ -1618,6 +1934,8 @@
 
         // Make removeFromList global
         window.removeFromList = removeFromList;
+        window.savePricePaid = savePricePaid;
+        window.skipPriceEntry = skipPriceEntry;
 
         // Admin mode (triple tap logo)
         document.getElementById('logoTap').addEventListener('click', () => {
