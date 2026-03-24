@@ -84,7 +84,7 @@
         /* Swipe Container */
         .swipe-container {
             height: 100vh;
-            width: 300vw;
+            width: 400vw;
             display: flex;
             transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             touch-action: pan-y;
@@ -419,6 +419,132 @@
             opacity: 0.3;
         }
 
+        /* Shopping List Styles */
+        .quick-add-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 0.875rem;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-add-btn:active {
+            transform: scale(0.98);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .list-item {
+            background: rgba(10, 22, 40, 0.55);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item-info {
+            flex: 1;
+        }
+
+        .list-item-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .list-item-price {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .list-item-remove {
+            background: rgba(255, 59, 48, 0.2);
+            border: 1px solid rgba(255, 59, 48, 0.4);
+            border-radius: 8px;
+            color: #ff3b30;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .list-total {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .list-total-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .list-total-amount {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .empty-list {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-list-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .add-item-form {
+            background: rgba(10, 22, 40, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .add-item-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .add-item-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .add-item-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            border-radius: 8px;
+            padding: 0.875rem;
+            color: var(--bg-primary);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
         /* Guides Section */
         .guides-section {
             margin-top: 2rem;
@@ -707,7 +833,49 @@
             </div>
         </div>
 
-        <!-- SCREEN 3: PROFILE -->
+        <!-- SCREEN 3: SHOPPING LIST -->
+        <div class="screen" id="shoppingListScreen">
+            <div class="screen-content">
+                <div class="header">
+                    <h1>Shopping List</h1>
+                    <div class="header-icon" id="clearListBtn">🗑️</div>
+                </div>
+
+                <!-- Add Item Form -->
+                <div class="add-item-form">
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                        <button id="photoListBtn" class="quick-add-btn">📸 Photo</button>
+                        <button id="typeListBtn" class="quick-add-btn">✍️ Type</button>
+                    </div>
+
+                    <div id="typeInputSection" class="hidden">
+                        <input 
+                            type="text" 
+                            id="itemInput" 
+                            class="add-item-input" 
+                            placeholder="e.g., Bananas, Tomatoes..."
+                        >
+                        <button id="addItemBtn" class="add-item-btn">Add to List</button>
+                    </div>
+                </div>
+
+                <!-- Shopping List Items -->
+                <div id="shoppingListItems">
+                    <!-- Populated by JavaScript -->
+                </div>
+
+                <!-- Total -->
+                <div id="listTotalSection" class="hidden">
+                    <div class="list-total">
+                        <div class="list-total-label">Estimated Total</div>
+                        <div class="list-total-amount" id="listTotalAmount">0 VND</div>
+                        <div style="font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.8;" id="listTotalRange"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: PROFILE -->
         <div class="screen" id="profileScreen">
             <div class="screen-content">
                 <div class="header">
@@ -821,6 +989,10 @@
             <div class="nav-label">Scan</div>
         </div>
         <div class="nav-item" data-screen="2">
+            <div class="nav-icon">🛒</div>
+            <div class="nav-label">List</div>
+        </div>
+        <div class="nav-item" data-screen="3">
             <div class="nav-icon">👤</div>
             <div class="nav-label">Profile</div>
         </div>
@@ -867,7 +1039,7 @@
     <!-- Firebase & App Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // Firebase config
         const firebaseConfig = {
@@ -897,6 +1069,8 @@
         let recentScans = JSON.parse(localStorage.getItem('recentScans') || '[]');
         let lastPhotoData = localStorage.getItem('lastPhoto') || null;
         let currentPhotoData = null;
+        let currentScanId = null; // For tracking scan-to-submission
+        let shoppingList = JSON.parse(localStorage.getItem('shoppingList') || '[]');
 
         // Fake leaders
         const fakeLeaders = [
@@ -974,7 +1148,8 @@
 
             // Load screen data when navigating
             if (screenIndex === 0) loadLeaderboard('volume');
-            if (screenIndex === 2) loadProfileStats();
+            if (screenIndex === 2) displayShoppingList();
+            if (screenIndex === 3) loadProfileStats();
         }
 
         // Touch handling
@@ -994,10 +1169,10 @@
             if (Math.abs(diff) > swipeThreshold) {
                 if (diff > 0) {
                     // Swipe left (next screen)
-                    if (currentScreen < 2) {
+                    if (currentScreen < 3) {
                         goToScreen(currentScreen + 1);
                     } else {
-                        // At profile (screen 2), loop back to leaderboard (screen 0)
+                        // At profile (screen 3), loop back to leaderboard (screen 0)
                         goToScreen(0);
                     }
                 } else if (diff < 0) {
@@ -1005,8 +1180,8 @@
                     if (currentScreen > 0) {
                         goToScreen(currentScreen - 1);
                     } else {
-                        // At leaderboard (screen 0), loop to profile (screen 2)
-                        goToScreen(2);
+                        // At leaderboard (screen 0), loop to profile (screen 3)
+                        goToScreen(3);
                     }
                 }
             }
@@ -1258,6 +1433,192 @@
         // Make showGuide globally accessible
         window.showGuide = showGuide;
 
+        // Shopping List System
+        function displayShoppingList() {
+            const container = document.getElementById('shoppingListItems');
+            
+            if (shoppingList.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-list">
+                        <div class="empty-list-icon">🛒</div>
+                        <div style="font-size: 1.1rem; margin-bottom: 0.5rem;">Your list is empty</div>
+                        <div style="font-size: 0.9rem;">Add items to get price estimates</div>
+                    </div>
+                `;
+                document.getElementById('listTotalSection').classList.add('hidden');
+                return;
+            }
+
+            container.innerHTML = shoppingList.map((item, index) => `
+                <div class="list-item">
+                    <div class="list-item-info">
+                        <div class="list-item-name">${item.name}</div>
+                        <div class="list-item-price">
+                            ${item.estimateMin && item.estimateMax 
+                                ? `${item.estimateMin.toLocaleString()} - ${item.estimateMax.toLocaleString()} VND`
+                                : 'Getting price...'}
+                        </div>
+                    </div>
+                    <div class="list-item-remove" onclick="removeFromList(${index})">✕</div>
+                </div>
+            `).join('');
+
+            updateListTotal();
+            document.getElementById('listTotalSection').classList.remove('hidden');
+        }
+
+        async function addItemToList(itemName) {
+            if (!itemName || !itemName.trim()) return;
+
+            // Add to list with loading state
+            shoppingList.push({
+                name: itemName.trim(),
+                estimateMin: null,
+                estimateMax: null
+            });
+
+            saveList();
+            displayShoppingList();
+
+            // Get AI price estimate
+            try {
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        itemName: itemName.trim(),
+                        location: currentLocation,
+                        estimateOnly: true
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    const index = shoppingList.length - 1;
+                    
+                    if (shoppingList[index]) {
+                        shoppingList[index].estimateMin = result.priceRange?.min || 0;
+                        shoppingList[index].estimateMax = result.priceRange?.max || 0;
+                        saveList();
+                        displayShoppingList();
+                    }
+                }
+            } catch (error) {
+                console.error('Error getting estimate:', error);
+            }
+        }
+
+        function removeFromList(index) {
+            shoppingList.splice(index, 1);
+            saveList();
+            displayShoppingList();
+        }
+
+        function updateListTotal() {
+            const total = shoppingList.reduce((sum, item) => {
+                return {
+                    min: sum.min + (item.estimateMin || 0),
+                    max: sum.max + (item.estimateMax || 0)
+                };
+            }, { min: 0, max: 0 });
+
+            const mid = Math.round((total.min + total.max) / 2);
+            
+            document.getElementById('listTotalAmount').textContent = 
+                `${mid.toLocaleString()} VND`;
+            document.getElementById('listTotalRange').textContent = 
+                `${total.min.toLocaleString()} - ${total.max.toLocaleString()} VND`;
+        }
+
+        function saveList() {
+            localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
+        }
+
+        function clearList() {
+            if (confirm('Clear entire shopping list?')) {
+                shoppingList = [];
+                saveList();
+                displayShoppingList();
+            }
+        }
+
+        async function scanListPhoto() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.capture = 'environment';
+
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = async (event) => {
+                    try {
+                        const base64Data = event.target.result.split(',')[1];
+                        
+                        // Call API with OCR prompt
+                        const response = await fetch('/api/analyze', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                image: base64Data,
+                                location: currentLocation,
+                                extractList: true
+                            })
+                        });
+
+                        if (!response.ok) throw new Error('OCR failed');
+
+                        const result = await response.json();
+                        
+                        // Result should contain array of items
+                        if (result.items && Array.isArray(result.items)) {
+                            for (const itemName of result.items) {
+                                await addItemToList(itemName);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('List scan error:', error);
+                        alert('Could not read list. Try typing items instead.');
+                    }
+                };
+                reader.readAsDataURL(file);
+            };
+
+            input.click();
+        }
+
+        // Shopping list event listeners
+        document.getElementById('typeListBtn').addEventListener('click', () => {
+            const section = document.getElementById('typeInputSection');
+            section.classList.toggle('hidden');
+            if (!section.classList.contains('hidden')) {
+                document.getElementById('itemInput').focus();
+            }
+        });
+
+        document.getElementById('addItemBtn').addEventListener('click', () => {
+            const input = document.getElementById('itemInput');
+            const items = input.value.split(',').map(s => s.trim()).filter(s => s);
+            
+            items.forEach(item => addItemToList(item));
+            
+            input.value = '';
+        });
+
+        document.getElementById('itemInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('addItemBtn').click();
+            }
+        });
+
+        document.getElementById('photoListBtn').addEventListener('click', scanListPhoto);
+        document.getElementById('clearListBtn').addEventListener('click', clearList);
+
+        // Make removeFromList global
+        window.removeFromList = removeFromList;
+
         // Admin mode (triple tap logo)
         document.getElementById('logoTap').addEventListener('click', () => {
             logoTapCount++;
@@ -1317,6 +1678,9 @@
                 result._photoHash = simpleHash(imageData.substring(0, 1000));
                 currentItemData = result;
                 
+                // PRIORITY 1: Track scan immediately (even without submission)
+                await trackScan(result);
+                
                 displayResult(result);
 
             } catch (error) {
@@ -1325,6 +1689,55 @@
                 document.getElementById('error').classList.remove('hidden');
             } finally {
                 document.getElementById('loading').classList.add('hidden');
+            }
+        }
+
+        // Track scan (browse data)
+        async function trackScan(itemData) {
+            try {
+                const now = new Date();
+                
+                const scanData = {
+                    // Event metadata
+                    timestamp: now.toISOString(),
+                    event_type: 'scan',
+                    
+                    // Item (from AI)
+                    item_name: itemData.item,
+                    item_description: itemData.description || '',
+                    ai_estimate_min: itemData.priceRange?.min || null,
+                    ai_estimate_max: itemData.priceRange?.max || null,
+                    ai_confidence: itemData.confidence || 'unknown',
+                    
+                    // Location
+                    location_city: currentLocation,
+                    latitude: currentCoords ? Math.round(currentCoords.lat * 100) / 100 : null,
+                    longitude: currentCoords ? Math.round(currentCoords.lon * 100) / 100 : null,
+                    
+                    // User
+                    user_id: userId,
+                    username: userName || null,
+                    
+                    // Submission data (null until submitted)
+                    price_paid: null,
+                    user_submitted: false,
+                    submission_timestamp: null,
+                    
+                    // Photo
+                    photo_hash: itemData._photoHash || null,
+                    
+                    // Source
+                    scan_source: 'camera' // vs 'shopping_list'
+                };
+                
+                // Save to Firebase
+                const docRef = await addDoc(collection(db, 'scans'), scanData);
+                currentScanId = docRef.id; // Store for later update
+                
+                console.log('✅ Scan tracked (browse data)');
+            } catch (error) {
+                console.error('Scan tracking error:', error);
+                // Don't block user if tracking fails
             }
         }
 
@@ -1436,36 +1849,49 @@
         async function saveToFirebase(userPrice, itemData) {
             try {
                 const now = new Date();
-                const estimatedMid = itemData.priceRange ? (itemData.priceRange.min + itemData.priceRange.max) / 2 : userPrice;
-
-                const submission = {
-                    timestamp: now.toISOString(),
+                
+                // If we have a scan ID, update that record
+                if (currentScanId) {
+                    await updateDoc(doc(db, 'scans', currentScanId), {
+                        price_paid: userPrice,
+                        user_submitted: true,
+                        submission_timestamp: now.toISOString(),
+                        
+                        // Add submission-specific fields
+                        data_source: adminMode ? 'admin' : 'user',
+                        data_tier: adminMode ? 'gold' : (itemData.user_corrected ? 'user_verified' : 'unverified'),
+                        
+                        // User correction tracking
+                        ai_predicted_item: itemData.ai_predicted_item || itemData.item,
+                        user_corrected: itemData.user_corrected || false,
+                        final_item_name: itemData.item
+                    });
                     
-                    // Item info (with correction tracking)
-                    item_name: itemData.item,
-                    ai_predicted_item: itemData.ai_predicted_item || itemData.item,
-                    user_corrected: itemData.user_corrected || false,
-                    item_description: itemData.description || '',
+                    console.log('✅ Updated scan with submission');
+                } else {
+                    // Fallback: create new submission record if no scan ID
+                    const submission = {
+                        timestamp: now.toISOString(),
+                        event_type: 'submission',
+                        item_name: itemData.item,
+                        ai_predicted_item: itemData.ai_predicted_item || itemData.item,
+                        user_corrected: itemData.user_corrected || false,
+                        item_description: itemData.description || '',
+                        price_paid: userPrice,
+                        currency: itemData.priceRange?.currency || 'VND',
+                        estimated_min: itemData.priceRange?.min || null,
+                        estimated_max: itemData.priceRange?.max || null,
+                        data_source: adminMode ? 'admin' : 'user',
+                        data_tier: adminMode ? 'gold' : (itemData.user_corrected ? 'user_verified' : 'unverified'),
+                        location_city: currentLocation,
+                        user_id: userId,
+                        username: userName || null,
+                        photo_hash: itemData._photoHash || null
+                    };
                     
-                    // Price
-                    price_paid: userPrice,
-                    currency: itemData.priceRange?.currency || 'VND',
-                    estimated_min: itemData.priceRange?.min || null,
-                    estimated_max: itemData.priceRange?.max || null,
-                    
-                    // Data quality
-                    data_source: adminMode ? 'admin' : 'user',
-                    data_tier: adminMode ? 'gold' : (itemData.user_corrected ? 'user_verified' : 'unverified'),
-                    location_city: currentLocation,
-                    
-                    // User
-                    user_id: userId,
-                    username: userName || null,
-                    photo_hash: itemData._photoHash || null
-                };
-
-                await addDoc(collection(db, 'price_submissions'), submission);
-                console.log('✅ Saved to Firebase');
+                    await addDoc(collection(db, 'price_submissions'), submission);
+                    console.log('✅ Saved submission (fallback)');
+                }
             } catch (error) {
                 console.error('Firebase error:', error);
             }
