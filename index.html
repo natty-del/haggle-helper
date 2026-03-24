@@ -38,6 +38,49 @@
             width: 100%;
         }
 
+        /* Persistent Photo Background */
+        .photo-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .photo-background.visible {
+            opacity: 1;
+        }
+
+        .photo-background img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(0px) brightness(0.4);
+        }
+
+        .photo-background.blurred img {
+            filter: blur(20px) brightness(0.3);
+        }
+
+        /* Dark gradient overlay on background */
+        .photo-background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(10, 22, 40, 0.4) 0%,
+                rgba(10, 22, 40, 0.7) 50%,
+                rgba(10, 22, 40, 0.9) 100%
+            );
+        }
+
         /* Swipe Container */
         .swipe-container {
             height: 100vh;
@@ -45,6 +88,8 @@
             display: flex;
             transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             touch-action: pan-y;
+            position: relative;
+            z-index: 1;
         }
 
         .screen {
@@ -102,11 +147,12 @@
 
         /* Cards */
         .card {
-            background: var(--card-bg);
+            background: rgba(10, 22, 40, 0.75);
+            backdrop-filter: blur(10px);
             border-radius: 16px;
             padding: 1.25rem;
             margin-bottom: 1rem;
-            border: 1px solid var(--card-border);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         /* Bottom Navigation */
@@ -116,9 +162,9 @@
             left: 0;
             right: 0;
             height: 70px;
-            background: rgba(10, 22, 40, 0.95);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(10, 22, 40, 0.85);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -236,8 +282,9 @@
         }
 
         .leaderboard-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(10, 22, 40, 0.8);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 12px;
             padding: 1rem;
             margin-bottom: 0.75rem;
@@ -247,8 +294,9 @@
         }
 
         .leaderboard-item.you {
-            background: rgba(255, 107, 53, 0.15);
-            border-color: rgba(255, 107, 53, 0.3);
+            background: rgba(255, 107, 53, 0.25);
+            border-color: rgba(255, 107, 53, 0.4);
+            backdrop-filter: blur(15px);
         }
 
         .rank {
@@ -313,8 +361,9 @@
         }
 
         .stat-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
+            background: rgba(10, 22, 40, 0.75);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 12px;
             padding: 1rem;
             text-align: center;
@@ -348,8 +397,9 @@
         }
 
         .badge-item {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
+            background: rgba(10, 22, 40, 0.75);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 12px;
             padding: 1rem;
             text-align: center;
@@ -386,34 +436,109 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
+            z-index: 2000;
             overflow-y: auto;
         }
 
+        .result-photo-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2001;
+        }
+
+        .result-photo-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .result-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 0) 0%,
+                rgba(0, 0, 0, 0.3) 30%,
+                rgba(0, 0, 0, 0.8) 70%,
+                rgba(0, 0, 0, 0.95) 100%
+            );
+            z-index: 2002;
+        }
+
         .result-content {
+            position: relative;
+            z-index: 2003;
             max-width: 600px;
             margin: 0 auto;
             padding: 1rem;
+            padding-top: 50vh; /* Start content halfway down */
+            min-height: 100vh;
+        }
+
+        .result-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 2004;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
         }
 
         .close-result {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
             width: 40px;
             height: 40px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
             border: none;
             border-radius: 50%;
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
-            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-item-title {
+            font-size: 2rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-description {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.9);
+            text-shadow: 0 1px 5px rgba(0,0,0,0.5);
+            margin-bottom: 2rem;
+        }
+
+        .price-card {
+            background: rgba(10, 22, 40, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
 <body>
+    <!-- Persistent Photo Background -->
+    <div class="photo-background" id="photoBackground">
+        <img id="backgroundImage" src="" alt="">
+    </div>
+
     <!-- Swipe Container with 3 Screens -->
     <div class="swipe-container" id="swipeContainer">
         
@@ -570,7 +695,14 @@
 
     <!-- Result Overlay -->
     <div id="resultOverlay" class="result-overlay hidden">
-        <button class="close-result" id="closeResult">✕</button>
+        <div class="result-photo-bg" id="resultPhotoBg">
+            <img id="resultPhoto" src="" alt="">
+        </div>
+        <div class="result-gradient"></div>
+        <div class="result-header">
+            <div></div>
+            <button class="close-result" id="closeResult">✕</button>
+        </div>
         <div class="result-content" id="resultContent">
             <!-- Populated by JavaScript -->
         </div>
@@ -607,6 +739,8 @@
         let currentLocation = '';
         let currentCoords = null;
         let recentScans = JSON.parse(localStorage.getItem('recentScans') || '[]');
+        let lastPhotoData = localStorage.getItem('lastPhoto') || null;
+        let currentPhotoData = null;
 
         // Fake leaders
         const fakeLeaders = [
@@ -640,6 +774,34 @@
                 hash = hash & hash;
             }
             return Math.abs(hash).toString(36);
+        }
+
+        // Set persistent background photo
+        function setBackgroundPhoto(imageData) {
+            const photoBackground = document.getElementById('photoBackground');
+            const backgroundImage = document.getElementById('backgroundImage');
+            
+            if (imageData) {
+                backgroundImage.src = imageData;
+                photoBackground.classList.add('visible');
+                photoBackground.classList.add('blurred');
+                localStorage.setItem('lastPhoto', imageData);
+                lastPhotoData = imageData;
+            }
+        }
+
+        // Clear background when viewing result (show sharp photo there instead)
+        function hideBackgroundPhoto() {
+            const photoBackground = document.getElementById('photoBackground');
+            photoBackground.classList.remove('visible');
+        }
+
+        // Restore blurred background after closing result
+        function showBackgroundPhoto() {
+            const photoBackground = document.getElementById('photoBackground');
+            if (lastPhotoData) {
+                photoBackground.classList.add('visible');
+            }
         }
 
         // Swipe Navigation
@@ -730,7 +892,9 @@
 
             const reader = new FileReader();
             reader.onload = async (event) => {
-                await analyzeItem(event.target.result);
+                currentPhotoData = event.target.result;
+                setBackgroundPhoto(currentPhotoData); // Set as persistent background
+                await analyzeItem(currentPhotoData);
             };
             reader.readAsDataURL(file);
         });
@@ -771,45 +935,50 @@
         // Display result
         function displayResult(data) {
             const resultContent = document.getElementById('resultContent');
+            const resultPhoto = document.getElementById('resultPhoto');
             const estimatedMid = data.priceRange ? (data.priceRange.min + data.priceRange.max) / 2 : 0;
 
+            // Set result photo background (sharp, not blurred)
+            if (currentPhotoData) {
+                resultPhoto.src = currentPhotoData;
+            }
+
             resultContent.innerHTML = `
-                <div style="padding: 2rem 1rem;">
-                    <h2 style="font-size: 1.8rem; margin-bottom: 1rem;">${data.item}</h2>
-                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">${data.description || ''}</p>
+                <div class="result-item-title">${data.item}</div>
+                <div class="result-description">${data.description || ''}</div>
 
-                    <div class="card">
-                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Fair Price Range</div>
-                        <div style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">
-                            ${data.priceRange ? `${data.priceRange.min.toLocaleString()} - ${data.priceRange.max.toLocaleString()}` : 'N/A'}
-                        </div>
-                        <div style="font-size: 0.85rem; color: var(--text-secondary);">
-                            ${data.priceRange ? data.priceRange.currency : ''}
-                        </div>
+                <div class="price-card">
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Fair Price Range</div>
+                    <div style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">
+                        ${data.priceRange ? `${data.priceRange.min.toLocaleString()} - ${data.priceRange.max.toLocaleString()}` : 'N/A'}
                     </div>
+                    <div style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">
+                        ${data.priceRange ? data.priceRange.currency : ''}
+                    </div>
+                </div>
 
-                    <div class="card">
-                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Start Negotiating At</div>
-                        <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary);">
-                            ${data.suggestedStartingOffer ? data.suggestedStartingOffer.toLocaleString() : 'N/A'}
-                        </div>
+                <div class="price-card">
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">Start Negotiating At</div>
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--accent-primary);">
+                        ${data.suggestedStartingOffer ? data.suggestedStartingOffer.toLocaleString() : 'N/A'}
                     </div>
+                </div>
 
-                    <div class="card">
-                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.75rem;">💡 Haggling Tips</div>
-                        ${data.hagglingTips ? data.hagglingTips.map(tip => `<div style="margin-bottom: 0.5rem;">• ${tip}</div>`).join('') : ''}
-                    </div>
+                <div class="price-card">
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 0.75rem;">💡 Haggling Tips</div>
+                    ${data.hagglingTips ? data.hagglingTips.map(tip => `<div style="margin-bottom: 0.5rem;">• ${tip}</div>`).join('') : ''}
+                </div>
 
-                    <div class="card">
-                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.75rem;">What did you actually pay?</div>
-                        <input type="number" id="pricePaid" placeholder="Enter price" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 0.75rem; color: white; font-size: 1rem; margin-bottom: 1rem;">
-                        <button id="submitPrice" style="width: 100%; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border: none; border-radius: 8px; padding: 0.875rem; color: var(--bg-primary); font-weight: 700; cursor: pointer;">
-                            Submit Price
-                        </button>
-                    </div>
+                <div class="price-card">
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 0.75rem;">What did you actually pay?</div>
+                    <input type="number" id="pricePaid" placeholder="Enter price" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 0.75rem; color: white; font-size: 1rem; margin-bottom: 1rem;">
+                    <button id="submitPrice" style="width: 100%; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); border: none; border-radius: 8px; padding: 0.875rem; color: var(--bg-primary); font-weight: 700; cursor: pointer;">
+                        Submit Price
+                    </button>
                 </div>
             `;
 
+            hideBackgroundPhoto(); // Hide blurred background while showing result
             document.getElementById('resultOverlay').classList.remove('hidden');
 
             // Submit price handler
@@ -832,6 +1001,7 @@
                 localStorage.setItem('recentScans', JSON.stringify(recentScans));
                 
                 document.getElementById('resultOverlay').classList.add('hidden');
+                showBackgroundPhoto(); // Restore blurred background
                 alert('✅ Saved! Check the leaderboard!');
                 
                 updateRecentScans();
@@ -841,6 +1011,7 @@
 
         document.getElementById('closeResult').addEventListener('click', () => {
             document.getElementById('resultOverlay').classList.add('hidden');
+            showBackgroundPhoto(); // Restore blurred background
         });
 
         // Save to Firebase
@@ -1037,6 +1208,11 @@
         // Initialize
         updateRecentScans();
         loadProfileStats();
+        
+        // Restore last photo background if exists
+        if (lastPhotoData) {
+            setBackgroundPhoto(lastPhotoData);
+        }
         
         // Auto-detect location
         if (navigator.geolocation) {
