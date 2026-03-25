@@ -42,22 +42,23 @@ exports.handler = async (event, context) => {
     if (textOnly && itemName) {
       console.log('Text-only request for:', itemName);
       
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": process.env.ANTHROPIC_API_KEY,
-          "anthropic-version": "2023-06-01"
-        },
-        signal: controller.signal,
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 500,
-          messages: [
-            {
-              role: "user",
-              content: `Estimate the typical market price for "${itemName}" in ${location || 'Hanoi, Vietnam'}.
-              
+      try {
+        const response = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": process.env.ANTHROPIC_API_KEY,
+            "anthropic-version": "2023-06-01"
+          },
+          signal: controller.signal,
+          body: JSON.stringify({
+            model: "claude-sonnet-4-20250514",
+            max_tokens: 500,
+            messages: [
+              {
+                role: "user",
+                content: `Estimate the typical market price for "${itemName}" in ${location || 'Hanoi, Vietnam'}.
+                
 Return ONLY a JSON object with this exact format:
 {
   "item": "${itemName}",
@@ -69,35 +70,59 @@ Return ONLY a JSON object with this exact format:
 }
 
 Use realistic Vietnamese market prices. Be accurate - this is for shopping budgets.`
-            }
-          ]
-        })
-      });
+              }
+            ]
+          })
+        });
 
-      clearTimeout(timeoutId);
+        clearTimeout(timeoutId);
 
-      if (!response.ok) {
-        throw new Error(`API returned ${response.status}`);
-      }
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Claude API error:', response.status, errorText);
+          throw new Error(`API returned ${response.status}`);
+        }
 
-      const data = await response.json();
-      const text = data.content[0].text;
-      
-      // Parse JSON from response
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        const result = JSON.parse(jsonMatch[0]);
+        const data = await response.json();
+        console.log('Claude API response:', JSON.stringify(data).substring(0, 200));
+        
+        const text = data.content[0].text;
+        
+        // Parse JSON from response
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          const result = JSON.parse(jsonMatch[0]);
+          console.log('Parsed result:', result);
+          return {
+            statusCode: 200,
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify(result)
+          };
+        }
+        
+        console.error('Could not find JSON in response:', text);
+        throw new Error('Could not parse price estimate');
+      } catch (textOnlyError) {
+        console.error('Text-only request failed:', textOnlyError);
+        clearTimeout(timeoutId);
+        
+        // Return error response
         return {
-          statusCode: 200,
+          statusCode: 500,
           headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'
           },
-          body: JSON.stringify(result)
+          body: JSON.stringify({
+            error: 'Text estimate failed',
+            message: textOnlyError.message,
+            item: itemName
+          })
         };
       }
-      
-      throw new Error('Could not parse price estimate');
     }
     
     // Original image-based request
