@@ -84,7 +84,7 @@
         /* Swipe Container */
         .swipe-container {
             height: 100vh;
-            width: 400vw;
+            width: 500vw;
             display: flex;
             transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             touch-action: pan-y;
@@ -147,12 +147,12 @@
 
         /* Cards */
         .card {
-            background: rgba(10, 22, 40, 0.5);
-            backdrop-filter: blur(15px);
+            background: rgba(10, 22, 40, 0.35);
+            backdrop-filter: blur(20px);
             border-radius: 16px;
             padding: 1.25rem;
             margin-bottom: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.25);
         }
 
         /* Bottom Navigation */
@@ -282,9 +282,9 @@
         }
 
         .leaderboard-item {
-            background: rgba(10, 22, 40, 0.6);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(10, 22, 40, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 12px;
             padding: 1rem;
             margin-bottom: 0.75rem;
@@ -294,9 +294,9 @@
         }
 
         .leaderboard-item.you {
-            background: rgba(255, 107, 53, 0.3);
+            background: rgba(255, 107, 53, 0.25);
             border-color: rgba(255, 107, 53, 0.5);
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
         }
 
         .rank {
@@ -361,9 +361,9 @@
         }
 
         .stat-card {
-            background: rgba(10, 22, 40, 0.55);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(10, 22, 40, 0.35);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 12px;
             padding: 1rem;
             text-align: center;
@@ -397,9 +397,9 @@
         }
 
         .badge-item {
-            background: rgba(10, 22, 40, 0.55);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(10, 22, 40, 0.35);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 12px;
             padding: 1rem;
             text-align: center;
@@ -440,61 +440,71 @@
         }
 
         .list-item {
-            background: rgba(10, 22, 40, 0.55);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(10, 22, 40, 0.35);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 12px;
             padding: 1rem;
             margin-bottom: 0.75rem;
+        }
+
+        .list-item-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s, background-color 0.2s;
-            touch-action: pan-y;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
         }
 
-        .list-item.swiping-right {
-            background: rgba(76, 217, 100, 0.3);
+        .list-item-info {
+            flex: 1;
         }
 
-        .list-item.swiping-left {
-            background: rgba(255, 59, 48, 0.3);
+        .list-item-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
         }
 
-        .swipe-action {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 100px;
+        .list-item-price {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .list-item-buttons {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .list-item-buttons button {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
             font-weight: 700;
-            opacity: 0;
-            transition: opacity 0.2s;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
         }
 
-        .swipe-action.left {
-            left: 0;
-            background: rgba(255, 59, 48, 0.8);
+        .bought-btn {
+            background: linear-gradient(135deg, #4CD964, #34C759);
             color: white;
         }
 
-        .swipe-action.right {
-            right: 0;
-            background: rgba(76, 217, 100, 0.8);
-            color: white;
+        .bought-btn:active {
+            transform: scale(0.95);
         }
 
-        .list-item.swiping-left .swipe-action.left {
-            opacity: 1;
+        .skip-btn {
+            background: rgba(255, 59, 48, 0.2);
+            border: 1px solid rgba(255, 59, 48, 0.4);
+            color: #ff3b30;
         }
 
-        .list-item.swiping-right .swipe-action.right {
-            opacity: 1;
+        .skip-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 59, 48, 0.3);
         }
 
         .list-item-info {
@@ -984,9 +994,9 @@
                     <!-- Populated by JavaScript -->
                 </div>
 
-                <!-- Swipe Hint -->
-                <div id="swipeHint" style="text-align: center; padding: 1rem; color: var(--text-secondary); font-size: 0.85rem;">
-                    💡 Swipe right to mark bought • Swipe left to skip
+                <!-- Hint -->
+                <div id="listHint" style="text-align: center; padding: 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                    💡 Tap Bought to enter price • Tap Skip to remove
                 </div>
 
                 <!-- Total -->
@@ -1101,6 +1111,31 @@
                 </div>
             </div>
         </div>
+
+        <!-- SCREEN 5: ADMIN QUICK SCAN -->
+        <div class="screen" id="adminScreen" style="display: none;">
+            <div class="screen-content">
+                <div class="header">
+                    <h1>⚡ Quick Scan</h1>
+                    <div class="header-icon" id="adminHelpBtn">ℹ️</div>
+                </div>
+
+                <div class="card" style="text-align: center; margin-bottom: 2rem;">
+                    <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Admin Mode</div>
+                    <div style="font-size: 1.5rem; font-weight: 700;">Gold-Tier Data Collection</div>
+                </div>
+
+                <button class="scan-btn" id="adminScanBtn" style="margin-bottom: 1.5rem;">
+                    <div class="scan-icon">⚡</div>
+                    <div>QUICK SCAN</div>
+                </button>
+
+                <div id="adminScans" style="margin-top: 1.5rem;">
+                    <div class="section-title">Today's Scans (<span id="adminScanCount">0</span>)</div>
+                    <div id="adminScansList"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Bottom Navigation -->
@@ -1128,9 +1163,19 @@
 
     <!-- Loading Indicator -->
     <div id="loading" class="loading hidden">
-        <div style="font-size: 3rem; margin-bottom: 1rem;">⏳</div>
-        <div>Analyzing item...</div>
+        <div style="background: rgba(0, 0, 0, 0.95); border-radius: 20px; padding: 3rem 2rem; text-align: center; max-width: 300px;">
+            <div style="font-size: 4rem; margin-bottom: 1rem; animation: spin 2s linear infinite;">⏳</div>
+            <div style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;">Analyzing...</div>
+            <div style="font-size: 0.9rem; color: var(--text-secondary);" id="loadingStatus">Please wait</div>
+        </div>
     </div>
+
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
 
     <!-- Error Display -->
     <div id="error" class="error hidden"></div>
@@ -1271,10 +1316,17 @@
                 item.classList.toggle('active', index === screenIndex);
             });
 
+            // Show/hide admin screen based on admin mode
+            const adminScreen = document.getElementById('adminScreen');
+            if (adminScreen) {
+                adminScreen.style.display = adminMode ? 'block' : 'none';
+            }
+
             // Load screen data when navigating
             if (screenIndex === 0) loadLeaderboard('volume');
             if (screenIndex === 2) displayShoppingList();
             if (screenIndex === 3) loadProfileStats();
+            if (screenIndex === 4 && adminMode) loadAdminScans();
         }
 
         // Touch handling
@@ -1292,12 +1344,14 @@
             const diff = touchStartX - touchEndX;
 
             if (Math.abs(diff) > swipeThreshold) {
+                const maxScreen = adminMode ? 4 : 3; // 5 screens if admin, 4 if not
+                
                 if (diff > 0) {
                     // Swipe left (next screen)
-                    if (currentScreen < 3) {
+                    if (currentScreen < maxScreen) {
                         goToScreen(currentScreen + 1);
                     } else {
-                        // At profile (screen 3), loop back to leaderboard (screen 0)
+                        // Loop back to leaderboard
                         goToScreen(0);
                     }
                 } else if (diff < 0) {
@@ -1305,8 +1359,8 @@
                     if (currentScreen > 0) {
                         goToScreen(currentScreen - 1);
                     } else {
-                        // At leaderboard (screen 0), loop to profile (screen 3)
-                        goToScreen(3);
+                        // Loop to last screen
+                        goToScreen(maxScreen);
                     }
                 }
             }
@@ -1580,85 +1634,29 @@
             }
 
             container.innerHTML = shoppingList.map((item, index) => `
-                <div class="list-item" data-index="${index}" id="item-${index}">
-                    <div class="swipe-action left">🚫 SKIP</div>
-                    <div class="swipe-action right">💰 BOUGHT</div>
-                    <div class="list-item-info">
-                        <div class="list-item-name">${item.name}</div>
-                        <div class="list-item-price">
-                            ${item.estimateMin && item.estimateMax 
-                                ? `${item.estimateMin.toLocaleString()} - ${item.estimateMax.toLocaleString()} VND`
-                                : 'Getting price...'}
+                <div class="list-item" id="item-${index}">
+                    <div class="list-item-header">
+                        <div class="list-item-info">
+                            <div class="list-item-name">${item.name}</div>
+                            <div class="list-item-price">
+                                ${item.estimateMin && item.estimateMax 
+                                    ? `${item.estimateMin.toLocaleString()} - ${item.estimateMax.toLocaleString()} VND`
+                                    : 'Getting price...'}
+                            </div>
                         </div>
+                    </div>
+                    <div class="list-item-buttons">
+                        <button class="bought-btn" onclick="showPriceModal(${index})">💰 Bought</button>
+                        <button class="skip-btn" onclick="skipListItem(${index})">🚫 Skip</button>
                     </div>
                 </div>
             `).join('');
-
-            // Add swipe listeners to each item
-            document.querySelectorAll('.list-item').forEach(itemEl => {
-                addSwipeListeners(itemEl);
-            });
 
             updateListTotal();
             const totalSection = document.getElementById('listTotalSection');
             if (totalSection) {
                 totalSection.classList.remove('hidden');
             }
-        }
-
-        function addSwipeListeners(element) {
-            let touchStartX = 0;
-            let touchEndX = 0;
-            let touchStartY = 0;
-            let touchEndY = 0;
-
-            element.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-                touchStartY = e.changedTouches[0].screenY;
-            });
-
-            element.addEventListener('touchmove', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                touchEndY = e.changedTouches[0].screenY;
-                const diffX = touchEndX - touchStartX;
-                const diffY = Math.abs(touchEndY - touchStartY);
-
-                // Only swipe horizontally if not scrolling vertically
-                if (diffY < 30) {
-                    e.preventDefault();
-                    
-                    if (diffX > 50) {
-                        element.classList.add('swiping-right');
-                        element.classList.remove('swiping-left');
-                    } else if (diffX < -50) {
-                        element.classList.add('swiping-left');
-                        element.classList.remove('swiping-right');
-                    } else {
-                        element.classList.remove('swiping-left', 'swiping-right');
-                    }
-                }
-            });
-
-            element.addEventListener('touchend', (e) => {
-                const swipeThreshold = 100;
-                const diffX = touchEndX - touchStartX;
-                const diffY = Math.abs(touchEndY - touchStartY);
-
-                element.classList.remove('swiping-left', 'swiping-right');
-
-                // Only process if horizontal swipe (not vertical scroll)
-                if (diffY < 30 && Math.abs(diffX) > swipeThreshold) {
-                    const index = parseInt(element.dataset.index);
-                    
-                    if (diffX > 0) {
-                        // Swipe RIGHT → Bought (show price modal)
-                        showPriceModal(index);
-                    } else {
-                        // Swipe LEFT → Skip (instant removal)
-                        skipListItem(index);
-                    }
-                }
-            });
         }
 
         async function addItemToList(itemName) {
@@ -1675,32 +1673,64 @@
             saveList();
             displayShoppingList();
 
-            // Get AI price estimate
-            try {
-                const response = await fetch('/api/analyze', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        itemName: itemName.trim(),
-                        location: currentLocation,
-                        estimateOnly: true
-                    })
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    const index = shoppingList.length - 1;
-                    
-                    if (shoppingList[index]) {
-                        shoppingList[index].estimateMin = result.priceRange?.min || 0;
-                        shoppingList[index].estimateMax = result.priceRange?.max || 0;
-                        saveList();
-                        displayShoppingList();
-                    }
-                }
-            } catch (error) {
-                console.error('Error getting estimate:', error);
+            // For now, use placeholder estimates until API is updated
+            // TODO: Update API to handle text-only requests
+            const index = shoppingList.length - 1;
+            
+            // Set reasonable default estimates based on common items
+            const defaultEstimates = getDefaultEstimate(itemName.trim().toLowerCase());
+            
+            if (shoppingList[index]) {
+                shoppingList[index].estimateMin = defaultEstimates.min;
+                shoppingList[index].estimateMax = defaultEstimates.max;
+                saveList();
+                displayShoppingList();
             }
+        }
+
+        function getDefaultEstimate(itemName) {
+            // Simple pattern matching for common items
+            // These are rough Hanoi market estimates
+            
+            if (itemName.includes('banana')) return { min: 15000, max: 25000 };
+            if (itemName.includes('tomato')) return { min: 10000, max: 20000 };
+            if (itemName.includes('rice') && itemName.includes('5')) return { min: 80000, max: 120000 };
+            if (itemName.includes('rice') && itemName.includes('2')) return { min: 35000, max: 50000 };
+            if (itemName.includes('rice')) return { min: 15000, max: 25000 };
+            if (itemName.includes('egg')) return { min: 30000, max: 45000 };
+            if (itemName.includes('chicken')) return { min: 50000, max: 80000 };
+            if (itemName.includes('pork')) return { min: 60000, max: 90000 };
+            if (itemName.includes('beef')) return { min: 100000, max: 150000 };
+            if (itemName.includes('onion')) return { min: 8000, max: 15000 };
+            if (itemName.includes('garlic')) return { min: 10000, max: 20000 };
+            if (itemName.includes('ginger')) return { min: 5000, max: 10000 };
+            if (itemName.includes('potato')) return { min: 10000, max: 18000 };
+            if (itemName.includes('carrot')) return { min: 8000, max: 15000 };
+            if (itemName.includes('cabbage')) return { min: 10000, max: 20000 };
+            if (itemName.includes('lettuce')) return { min: 8000, max: 15000 };
+            if (itemName.includes('cucumber')) return { min: 5000, max: 12000 };
+            if (itemName.includes('pepper')) return { min: 10000, max: 20000 };
+            if (itemName.includes('chili')) return { min: 15000, max: 30000 };
+            if (itemName.includes('milk')) return { min: 25000, max: 40000 };
+            if (itemName.includes('bread')) return { min: 10000, max: 20000 };
+            if (itemName.includes('coffee')) return { min: 50000, max: 150000 };
+            if (itemName.includes('tea')) return { min: 30000, max: 80000 };
+            if (itemName.includes('water')) return { min: 5000, max: 15000 };
+            if (itemName.includes('beer')) return { min: 10000, max: 25000 };
+            if (itemName.includes('wine')) return { min: 80000, max: 200000 };
+            if (itemName.includes('mango')) return { min: 20000, max: 40000 };
+            if (itemName.includes('apple')) return { min: 30000, max: 60000 };
+            if (itemName.includes('orange')) return { min: 15000, max: 30000 };
+            if (itemName.includes('grape')) return { min: 40000, max: 80000 };
+            if (itemName.includes('watermelon')) return { min: 20000, max: 40000 };
+            if (itemName.includes('pineapple')) return { min: 15000, max: 30000 };
+            if (itemName.includes('dragon fruit')) return { min: 20000, max: 35000 };
+            if (itemName.includes('fish')) return { min: 80000, max: 150000 };
+            if (itemName.includes('shrimp')) return { min: 120000, max: 200000 };
+            if (itemName.includes('squid')) return { min: 100000, max: 180000 };
+            
+            // Default for unknown items
+            return { min: 10000, max: 50000 };
         }
 
         function showPriceModal(index) {
@@ -1936,6 +1966,224 @@
         window.removeFromList = removeFromList;
         window.savePricePaid = savePricePaid;
         window.skipPriceEntry = skipPriceEntry;
+        window.showPriceModal = showPriceModal;
+        window.skipListItem = skipListItem;
+
+        // Admin Quick Scan System
+        let adminScansToday = JSON.parse(localStorage.getItem('adminScansToday') || '[]');
+
+        function loadAdminScans() {
+            const container = document.getElementById('adminScansList');
+            const count = document.getElementById('adminScanCount');
+            
+            if (!container) return;
+            
+            // Filter today's scans
+            const today = new Date().toDateString();
+            adminScansToday = adminScansToday.filter(scan => 
+                new Date(scan.timestamp).toDateString() === today
+            );
+            localStorage.setItem('adminScansToday', JSON.stringify(adminScansToday));
+            
+            count.textContent = adminScansToday.length;
+            
+            if (adminScansToday.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</div>
+                        <div>No scans yet today</div>
+                        <div style="font-size: 0.85rem; margin-top: 0.5rem;">Tap Quick Scan to start</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = adminScansToday.slice().reverse().map((scan, index) => `
+                <div class="card" style="margin-bottom: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <div style="font-weight: 700; margin-bottom: 0.25rem;">${scan.item}</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                                ${scan.price.toLocaleString()} VND
+                            </div>
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary);">
+                            ${new Date(scan.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function adminQuickScan() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.capture = 'environment';
+
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = async (event) => {
+                    try {
+                        const imageData = event.target.result;
+                        currentPhotoData = imageData;
+                        
+                        // Save as background
+                        localStorage.setItem('lastPhoto', imageData);
+                        lastPhotoData = imageData;
+                        showBackgroundPhoto();
+                        
+                        document.getElementById('loading').classList.remove('hidden');
+
+                        // Analyze with API
+                        const base64Data = imageData.split(',')[1];
+                        const response = await fetch('/api/analyze', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                image: base64Data,
+                                location: currentLocation
+                            })
+                        });
+
+                        if (!response.ok) throw new Error('Analysis failed');
+
+                        const result = await response.json();
+                        
+                        document.getElementById('loading').classList.add('hidden');
+                        
+                        // Show admin price entry modal (no tips, just data)
+                        showAdminPriceModal(result);
+
+                    } catch (error) {
+                        console.error('Admin scan error:', error);
+                        document.getElementById('loading').classList.add('hidden');
+                        alert('Scan failed. Please try again.');
+                    }
+                };
+                reader.readAsDataURL(file);
+            };
+
+            input.click();
+        }
+
+        function showAdminPriceModal(itemData) {
+            const modalHTML = `
+                <div class="price-modal-overlay" id="adminPriceModal">
+                    <div class="price-modal">
+                        <h3>⚡ ${itemData.item}</h3>
+                        <div class="estimate" style="margin-bottom: 1.5rem;">Gold-Tier Data Entry</div>
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">Actual Price</label>
+                            <input type="number" 
+                                id="adminPriceInput" 
+                                inputmode="numeric"
+                                placeholder="Enter exact price"
+                                style="width: 100%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; padding: 1rem; color: white; font-size: 1.5rem; text-align: center; margin-bottom: 1rem;">
+                        </div>
+                        
+                        <div class="price-modal-buttons">
+                            <button class="save-price-btn" onclick="saveAdminScan()">✓ Save to Baseline</button>
+                            <button class="skip-price-btn" onclick="closeAdminPriceModal()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            // Store current item data
+            window.currentAdminItem = itemData;
+            
+            // Auto-focus input
+            setTimeout(() => {
+                const input = document.getElementById('adminPriceInput');
+                if (input) input.focus();
+            }, 100);
+        }
+
+        async function saveAdminScan() {
+            const input = document.getElementById('adminPriceInput');
+            const price = input ? parseFloat(input.value) : null;
+            
+            if (!price || price <= 0) {
+                alert('Please enter a valid price');
+                return;
+            }
+
+            const itemData = window.currentAdminItem;
+            if (!itemData) return;
+
+            try {
+                // Save to Firebase as gold-tier baseline data
+                await addDoc(collection(db, 'scans'), {
+                    timestamp: new Date().toISOString(),
+                    event_type: 'scan',
+                    
+                    // Item
+                    item_name: itemData.item,
+                    item_description: itemData.description || '',
+                    
+                    // Price
+                    price_paid: price,
+                    user_submitted: true,
+                    submission_timestamp: new Date().toISOString(),
+                    
+                    // Location
+                    location_city: currentLocation,
+                    latitude: currentCoords ? Math.round(currentCoords.lat * 100) / 100 : null,
+                    longitude: currentCoords ? Math.round(currentCoords.lon * 100) / 100 : null,
+                    
+                    // Data quality (GOLD)
+                    data_source: 'admin',
+                    data_tier: 'gold',
+                    
+                    // User
+                    user_id: userId,
+                    username: userName || 'Admin',
+                    
+                    // Source
+                    scan_source: 'admin_quick_scan'
+                });
+
+                // Add to today's list
+                adminScansToday.push({
+                    item: itemData.item,
+                    price: price,
+                    timestamp: new Date().toISOString()
+                });
+                localStorage.setItem('adminScansToday', JSON.stringify(adminScansToday));
+
+                closeAdminPriceModal();
+                
+                // Show success feedback
+                alert(`✅ Saved: ${itemData.item} - ${price.toLocaleString()} VND\n(Gold-tier baseline data)`);
+                
+                // Reload admin scans list
+                loadAdminScans();
+
+            } catch (error) {
+                console.error('Admin save error:', error);
+                alert('Failed to save. Please try again.');
+            }
+        }
+
+        function closeAdminPriceModal() {
+            const modal = document.getElementById('adminPriceModal');
+            if (modal) modal.remove();
+            window.currentAdminItem = null;
+        }
+
+        // Admin scan button
+        document.getElementById('adminScanBtn').addEventListener('click', adminQuickScan);
+
+        // Make admin functions global
+        window.saveAdminScan = saveAdminScan;
+        window.closeAdminPriceModal = closeAdminPriceModal;
 
         // Admin mode (triple tap logo)
         document.getElementById('logoTap').addEventListener('click', () => {
@@ -1950,7 +2198,16 @@
             if (logoTapCount === 3) {
                 adminMode = !adminMode;
                 document.getElementById('adminStatus').textContent = adminMode ? 'ON ✅' : 'OFF';
-                alert(adminMode ? '🔑 Admin Mode Enabled\n\nYour scans = Gold Standard data' : 'Admin Mode Disabled');
+                
+                // Show/hide admin screen
+                const adminScreen = document.getElementById('adminScreen');
+                if (adminScreen) {
+                    adminScreen.style.display = adminMode ? 'block' : 'none';
+                }
+                
+                alert(adminMode 
+                    ? '🔑 Admin Mode Enabled\n\n⚡ Quick Scan screen unlocked\nSwipe past Profile to access\n\nYour scans = Gold-tier baseline data' 
+                    : 'Admin Mode Disabled');
                 logoTapCount = 0;
             }
         });
@@ -1976,10 +2233,16 @@
 
         // Analyze item
         async function analyzeItem(imageData) {
-            document.getElementById('loading').classList.remove('hidden');
+            const loadingEl = document.getElementById('loading');
+            const statusEl = document.getElementById('loadingStatus');
+            
+            loadingEl.classList.remove('hidden');
+            if (statusEl) statusEl.textContent = 'Uploading image...';
 
             try {
                 const base64Data = imageData.split(',')[1];
+                
+                if (statusEl) statusEl.textContent = 'Analyzing with AI...';
                 
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
@@ -1990,23 +2253,41 @@
                     })
                 });
 
-                if (!response.ok) throw new Error('Analysis failed');
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('API Error:', errorText);
+                    throw new Error(`Analysis failed: ${response.status}`);
+                }
+
+                if (statusEl) statusEl.textContent = 'Getting price estimates...';
 
                 const result = await response.json();
+                
+                console.log('API Result:', result); // Debug log
+                
                 result._photoHash = simpleHash(imageData.substring(0, 1000));
                 currentItemData = result;
+                
+                if (statusEl) statusEl.textContent = 'Saving scan data...';
                 
                 // PRIORITY 1: Track scan immediately (even without submission)
                 await trackScan(result);
                 
+                if (statusEl) statusEl.textContent = 'Done!';
+                
                 displayResult(result);
 
             } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('error').textContent = 'Could not analyze. Try again.';
+                console.error('Analysis Error:', error);
+                document.getElementById('error').textContent = `Could not analyze: ${error.message}. Please try again.`;
                 document.getElementById('error').classList.remove('hidden');
+                
+                // Hide error after 5 seconds
+                setTimeout(() => {
+                    document.getElementById('error').classList.add('hidden');
+                }, 5000);
             } finally {
-                document.getElementById('loading').classList.add('hidden');
+                loadingEl.classList.add('hidden');
             }
         }
 
@@ -2218,7 +2499,11 @@
         // Leaderboard
         async function loadLeaderboard(type = 'volume') {
             try {
+                console.log('Loading leaderboard...', type);
+                
                 const allSubmissions = await getDocs(collection(db, 'price_submissions'));
+                console.log('Submissions loaded:', allSubmissions.size);
+                
                 const userStats = {};
                 
                 allSubmissions.forEach(doc => {
@@ -2253,6 +2538,7 @@
                 });
                 
                 let allUsers = [...Object.values(userStats), ...fakeLeaders];
+                console.log('Total users (real + fake):', allUsers.length);
                 
                 if (type === 'volume') {
                     allUsers.sort((a, b) => b.count - a.count);
@@ -2266,6 +2552,16 @@
                 
             } catch (error) {
                 console.error('Error loading leaderboard:', error);
+                const container = document.getElementById('volumeLeaderboard');
+                if (container) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
+                            <div>Could not load leaderboard</div>
+                            <div style="font-size: 0.85rem; margin-top: 0.5rem;">${error.message}</div>
+                        </div>
+                    `;
+                }
             }
         }
 
