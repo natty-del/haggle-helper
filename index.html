@@ -989,7 +989,11 @@
             <div class="screen-content">
                 <div class="header">
                     <h1>Shopping List</h1>
-                    <div class="header-icon" id="clearListBtn">🗑️</div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <div class="header-icon" id="loadListBtn">📂</div>
+                        <div class="header-icon" id="saveListBtn">💾</div>
+                        <div class="header-icon" id="clearListBtn">🗑️</div>
+                    </div>
                 </div>
 
                 <!-- Add Item Form -->
@@ -1262,6 +1266,7 @@
         let currentPhotoData = null;
         let currentScanId = null; // For tracking scan-to-submission
         let shoppingList = JSON.parse(localStorage.getItem('shoppingList') || '[]');
+        let savedLists = JSON.parse(localStorage.getItem('savedLists') || '[]');
 
         // Fake leaders
         const fakeLeaders = [
@@ -1665,12 +1670,14 @@
                         </div>
                         <div style="flex: 1; ${item.status === 'checked' ? 'text-decoration: line-through; opacity: 0.5;' : ''}">
                             <div style="font-weight: 600; margin-bottom: 0.25rem;">${item.name}</div>
-                            <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                            <div style="font-size: 0.85rem; color: ${item.noData ? '#ff6b35' : 'var(--text-secondary)'};">
                                 ${item.loading 
                                     ? '⏳ Getting AI estimate...'
-                                    : item.estimateMin && item.estimateMax 
-                                        ? `${item.estimateMin.toLocaleString()} - ${item.estimateMax.toLocaleString()} VND`
-                                        : 'Estimate unavailable'}
+                                    : item.noData
+                                        ? '📊 Scan item in-store to add price data'
+                                        : item.estimateMin && item.estimateMax 
+                                            ? `${item.estimateMin.toLocaleString()} - ${item.estimateMax.toLocaleString()} VND`
+                                            : '📊 Scan item in-store to add price data'}
                             </div>
                         </div>
                     </div>
@@ -1680,7 +1687,13 @@
             updateListTotal();
             const totalSection = document.getElementById('listTotalSection');
             if (totalSection) {
-                totalSection.classList.remove('hidden');
+                // Only show total if we have at least some real prices
+                const hasRealPrices = shoppingList.some(item => item.estimateMin && item.estimateMax && !item.noData);
+                if (hasRealPrices) {
+                    totalSection.classList.remove('hidden');
+                } else {
+                    totalSection.classList.add('hidden');
+                }
             }
         }
 
@@ -1710,7 +1723,8 @@
                 estimateMin: null,
                 estimateMax: null,
                 status: 'pending',
-                loading: true
+                loading: true,
+                noData: false
             });
 
             saveList();
@@ -1735,82 +1749,34 @@
                     console.log('AI estimate for', itemName, ':', result);
                     
                     if (shoppingList[index]) {
-                        shoppingList[index].estimateMin = result.priceRange?.min || 10000;
-                        shoppingList[index].estimateMax = result.priceRange?.max || 50000;
+                        shoppingList[index].estimateMin = result.priceRange?.min || null;
+                        shoppingList[index].estimateMax = result.priceRange?.max || null;
                         shoppingList[index].loading = false;
+                        shoppingList[index].noData = !result.priceRange?.min; // Mark if no real data
                         saveList();
                         displayShoppingList();
                     }
                 } else {
-                    // Fallback on API error
-                    console.error('API failed, using fallback');
-                    const fallback = getDefaultEstimate(itemName.trim().toLowerCase());
+                    // API failed - mark as no data (don't use fallback!)
+                    console.error('API failed for', itemName);
                     if (shoppingList[index]) {
-                        shoppingList[index].estimateMin = fallback.min;
-                        shoppingList[index].estimateMax = fallback.max;
                         shoppingList[index].loading = false;
+                        shoppingList[index].noData = true;
                         saveList();
                         displayShoppingList();
                     }
                 }
             } catch (error) {
                 console.error('Error getting estimate:', error);
-                // Fallback on error
+                // Error - mark as no data (don't use fallback!)
                 const index = shoppingList.length - 1;
-                const fallback = getDefaultEstimate(itemName.trim().toLowerCase());
                 if (shoppingList[index]) {
-                    shoppingList[index].estimateMin = fallback.min;
-                    shoppingList[index].estimateMax = fallback.max;
                     shoppingList[index].loading = false;
+                    shoppingList[index].noData = true;
                     saveList();
                     displayShoppingList();
                 }
             }
-        }
-
-        function getDefaultEstimate(itemName) {
-            // Simple pattern matching for common items
-            // These are rough Hanoi market estimates
-            
-            if (itemName.includes('banana')) return { min: 15000, max: 25000 };
-            if (itemName.includes('tomato')) return { min: 10000, max: 20000 };
-            if (itemName.includes('rice') && itemName.includes('5')) return { min: 80000, max: 120000 };
-            if (itemName.includes('rice') && itemName.includes('2')) return { min: 35000, max: 50000 };
-            if (itemName.includes('rice')) return { min: 15000, max: 25000 };
-            if (itemName.includes('egg')) return { min: 30000, max: 45000 };
-            if (itemName.includes('chicken')) return { min: 50000, max: 80000 };
-            if (itemName.includes('pork')) return { min: 60000, max: 90000 };
-            if (itemName.includes('beef')) return { min: 100000, max: 150000 };
-            if (itemName.includes('onion')) return { min: 8000, max: 15000 };
-            if (itemName.includes('garlic')) return { min: 10000, max: 20000 };
-            if (itemName.includes('ginger')) return { min: 5000, max: 10000 };
-            if (itemName.includes('potato')) return { min: 10000, max: 18000 };
-            if (itemName.includes('carrot')) return { min: 8000, max: 15000 };
-            if (itemName.includes('cabbage')) return { min: 10000, max: 20000 };
-            if (itemName.includes('lettuce')) return { min: 8000, max: 15000 };
-            if (itemName.includes('cucumber')) return { min: 5000, max: 12000 };
-            if (itemName.includes('pepper')) return { min: 10000, max: 20000 };
-            if (itemName.includes('chili')) return { min: 15000, max: 30000 };
-            if (itemName.includes('milk')) return { min: 25000, max: 40000 };
-            if (itemName.includes('bread')) return { min: 10000, max: 20000 };
-            if (itemName.includes('coffee')) return { min: 50000, max: 150000 };
-            if (itemName.includes('tea')) return { min: 30000, max: 80000 };
-            if (itemName.includes('water')) return { min: 5000, max: 15000 };
-            if (itemName.includes('beer')) return { min: 10000, max: 25000 };
-            if (itemName.includes('wine')) return { min: 80000, max: 200000 };
-            if (itemName.includes('mango')) return { min: 20000, max: 40000 };
-            if (itemName.includes('apple')) return { min: 30000, max: 60000 };
-            if (itemName.includes('orange')) return { min: 15000, max: 30000 };
-            if (itemName.includes('grape')) return { min: 40000, max: 80000 };
-            if (itemName.includes('watermelon')) return { min: 20000, max: 40000 };
-            if (itemName.includes('pineapple')) return { min: 15000, max: 30000 };
-            if (itemName.includes('dragon fruit')) return { min: 20000, max: 35000 };
-            if (itemName.includes('fish')) return { min: 80000, max: 150000 };
-            if (itemName.includes('shrimp')) return { min: 120000, max: 200000 };
-            if (itemName.includes('squid')) return { min: 100000, max: 180000 };
-            
-            // Default for unknown items
-            return { min: 10000, max: 50000 };
         }
 
         function showPriceModal(index) {
@@ -2041,6 +2007,160 @@
 
         document.getElementById('photoListBtn').addEventListener('click', scanListPhoto);
         document.getElementById('clearListBtn').addEventListener('click', clearList);
+        document.getElementById('saveListBtn').addEventListener('click', showSaveListModal);
+        document.getElementById('loadListBtn').addEventListener('click', showLoadListModal);
+
+        // Save/Load Lists System
+        function showSaveListModal() {
+            const modalHTML = `
+                <div class="price-modal-overlay" id="saveListModal">
+                    <div class="price-modal">
+                        <h3>💾 Save Shopping List</h3>
+                        <div style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
+                            ${shoppingList.length} items on current list
+                        </div>
+                        
+                        <input type="text" 
+                            id="listNameInput" 
+                            placeholder="e.g., Weekly Groceries"
+                            style="width: 100%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; padding: 1rem; color: white; font-size: 1rem; margin-bottom: 1rem;">
+                        
+                        <div class="price-modal-buttons">
+                            <button class="save-price-btn" onclick="saveCurrentList()">✓ Save List</button>
+                            <button class="skip-price-btn" onclick="closeSaveListModal()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            setTimeout(() => document.getElementById('listNameInput').focus(), 100);
+        }
+
+        function saveCurrentList() {
+            const input = document.getElementById('listNameInput');
+            const listName = input ? input.value.trim() : '';
+            
+            if (!listName) {
+                alert('Please enter a name for this list');
+                return;
+            }
+
+            if (shoppingList.length === 0) {
+                alert('Your list is empty');
+                return;
+            }
+
+            // Save list with timestamp
+            const savedList = {
+                id: Date.now(),
+                name: listName,
+                items: JSON.parse(JSON.stringify(shoppingList)), // Deep copy
+                createdAt: new Date().toISOString(),
+                itemCount: shoppingList.length
+            };
+
+            savedLists.push(savedList);
+            localStorage.setItem('savedLists', JSON.stringify(savedLists));
+            
+            closeSaveListModal();
+            alert(`✅ Saved "${listName}" with ${shoppingList.length} items`);
+        }
+
+        function showLoadListModal() {
+            if (savedLists.length === 0) {
+                alert('No saved lists yet.\n\nSave your current list using the 💾 button.');
+                return;
+            }
+
+            const listsHTML = savedLists.slice().reverse().map((list, index) => {
+                const realIndex = savedLists.length - 1 - index;
+                const date = new Date(list.createdAt).toLocaleDateString();
+                return `
+                    <div class="card" style="margin-bottom: 0.75rem; cursor: pointer;" onclick="loadSavedList(${realIndex})">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 700; margin-bottom: 0.25rem;">${list.name}</div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                                    ${list.itemCount} items • ${date}
+                                </div>
+                            </div>
+                            <button onclick="event.stopPropagation(); deleteSavedList(${realIndex})" 
+                                style="background: rgba(255, 59, 48, 0.2); border: 1px solid rgba(255, 59, 48, 0.4); color: #ff3b30; padding: 0.5rem; border-radius: 6px; cursor: pointer;">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const modalHTML = `
+                <div class="price-modal-overlay" id="loadListModal">
+                    <div class="price-modal" style="max-height: 80vh; overflow-y: auto;">
+                        <h3>📂 Load Shopping List</h3>
+                        <div style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
+                            Tap a list to load it
+                        </div>
+                        
+                        ${listsHTML}
+                        
+                        <button class="skip-price-btn" onclick="closeLoadListModal()" style="width: 100%; margin-top: 1rem;">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+
+        function loadSavedList(index) {
+            const list = savedLists[index];
+            if (!list) return;
+
+            if (shoppingList.length > 0) {
+                if (!confirm(`Replace current list (${shoppingList.length} items) with "${list.name}" (${list.itemCount} items)?`)) {
+                    return;
+                }
+            }
+
+            shoppingList = JSON.parse(JSON.stringify(list.items)); // Deep copy
+            saveList();
+            displayShoppingList();
+            closeLoadListModal();
+            
+            alert(`✅ Loaded "${list.name}" with ${list.itemCount} items`);
+        }
+
+        function deleteSavedList(index) {
+            const list = savedLists[index];
+            if (!list) return;
+
+            if (confirm(`Delete "${list.name}"?`)) {
+                savedLists.splice(index, 1);
+                localStorage.setItem('savedLists', JSON.stringify(savedLists));
+                closeLoadListModal();
+                
+                if (savedLists.length > 0) {
+                    showLoadListModal(); // Reopen to show updated list
+                }
+            }
+        }
+
+        function closeSaveListModal() {
+            const modal = document.getElementById('saveListModal');
+            if (modal) modal.remove();
+        }
+
+        function closeLoadListModal() {
+            const modal = document.getElementById('loadListModal');
+            if (modal) modal.remove();
+        }
+
+        // Make functions global
+        window.saveCurrentList = saveCurrentList;
+        window.closeSaveListModal = closeSaveListModal;
+        window.loadSavedList = loadSavedList;
+        window.deleteSavedList = deleteSavedList;
+        window.closeLoadListModal = closeLoadListModal;
 
         // Make removeFromList global
         window.removeFromList = removeFromList;
