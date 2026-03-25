@@ -793,9 +793,30 @@
         }
 
         /* Loading & Error States */
-        .loading, .error {
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+        }
+
+        .error {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 59, 48, 0.95);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            max-width: 90%;
             text-align: center;
-            padding: 2rem;
+            z-index: 5001;
         }
 
         .hidden {
@@ -996,7 +1017,7 @@
 
                 <!-- Hint -->
                 <div id="listHint" style="text-align: center; padding: 1rem; color: var(--text-secondary); font-size: 0.85rem;">
-                    💡 Tap Bought to enter price • Tap Skip to remove
+                    💡 Tap once to check off • Tap again to enter price
                 </div>
 
                 <!-- Total -->
@@ -1634,20 +1655,22 @@
             }
 
             container.innerHTML = shoppingList.map((item, index) => `
-                <div class="list-item" id="item-${index}">
-                    <div class="list-item-header">
-                        <div class="list-item-info">
-                            <div class="list-item-name">${item.name}</div>
-                            <div class="list-item-price">
+                <div class="list-item ${item.status === 'checked' ? 'checked' : ''}" 
+                     id="item-${index}" 
+                     onclick="toggleListItem(${index})"
+                     style="cursor: pointer; transition: all 0.3s;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="font-size: 1.5rem; min-width: 30px;">
+                            ${item.status === 'checked' ? '✓' : '○'}
+                        </div>
+                        <div style="flex: 1; ${item.status === 'checked' ? 'text-decoration: line-through; opacity: 0.5;' : ''}">
+                            <div style="font-weight: 600; margin-bottom: 0.25rem;">${item.name}</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">
                                 ${item.estimateMin && item.estimateMax 
                                     ? `${item.estimateMin.toLocaleString()} - ${item.estimateMax.toLocaleString()} VND`
-                                    : 'Getting price...'}
+                                    : 'Loading...'}
                             </div>
                         </div>
-                    </div>
-                    <div class="list-item-buttons">
-                        <button class="bought-btn" onclick="showPriceModal(${index})">💰 Bought</button>
-                        <button class="skip-btn" onclick="skipListItem(${index})">🚫 Skip</button>
                     </div>
                 </div>
             `).join('');
@@ -1659,33 +1682,41 @@
             }
         }
 
+        function toggleListItem(index) {
+            const item = shoppingList[index];
+            if (!item) return;
+
+            if (!item.status || item.status === 'pending') {
+                // First tap - check it off
+                item.status = 'checked';
+                saveList();
+                displayShoppingList();
+            } else if (item.status === 'checked') {
+                // Second tap - show price modal
+                showPriceModal(index);
+            }
+        }
+
         async function addItemToList(itemName) {
             if (!itemName || !itemName.trim()) return;
 
-            // Add to list with loading state
+            console.log('Adding item to list:', itemName);
+
+            // Set reasonable default estimates based on common items
+            const defaultEstimates = getDefaultEstimate(itemName.trim().toLowerCase());
+            
+            console.log('Estimates for', itemName, ':', defaultEstimates);
+
+            // Add to list with estimates already loaded
             shoppingList.push({
                 name: itemName.trim(),
-                estimateMin: null,
-                estimateMax: null,
+                estimateMin: defaultEstimates.min,
+                estimateMax: defaultEstimates.max,
                 status: 'pending'
             });
 
             saveList();
             displayShoppingList();
-
-            // For now, use placeholder estimates until API is updated
-            // TODO: Update API to handle text-only requests
-            const index = shoppingList.length - 1;
-            
-            // Set reasonable default estimates based on common items
-            const defaultEstimates = getDefaultEstimate(itemName.trim().toLowerCase());
-            
-            if (shoppingList[index]) {
-                shoppingList[index].estimateMin = defaultEstimates.min;
-                shoppingList[index].estimateMax = defaultEstimates.max;
-                saveList();
-                displayShoppingList();
-            }
         }
 
         function getDefaultEstimate(itemName) {
@@ -1968,6 +1999,7 @@
         window.skipPriceEntry = skipPriceEntry;
         window.showPriceModal = showPriceModal;
         window.skipListItem = skipListItem;
+        window.toggleListItem = toggleListItem;
 
         // Admin Quick Scan System
         let adminScansToday = JSON.parse(localStorage.getItem('adminScansToday') || '[]');
