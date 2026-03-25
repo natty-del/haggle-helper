@@ -1666,9 +1666,11 @@
                         <div style="flex: 1; ${item.status === 'checked' ? 'text-decoration: line-through; opacity: 0.5;' : ''}">
                             <div style="font-weight: 600; margin-bottom: 0.25rem;">${item.name}</div>
                             <div style="font-size: 0.85rem; color: var(--text-secondary);">
-                                ${item.estimateMin && item.estimateMax 
-                                    ? `${item.estimateMin.toLocaleString()} - ${item.estimateMax.toLocaleString()} VND`
-                                    : 'Loading...'}
+                                ${item.loading 
+                                    ? '⏳ Getting AI estimate...'
+                                    : item.estimateMin && item.estimateMax 
+                                        ? `${item.estimateMin.toLocaleString()} - ${item.estimateMax.toLocaleString()} VND`
+                                        : 'Estimate unavailable'}
                             </div>
                         </div>
                     </div>
@@ -1702,21 +1704,68 @@
 
             console.log('Adding item to list:', itemName);
 
-            // Set reasonable default estimates based on common items
-            const defaultEstimates = getDefaultEstimate(itemName.trim().toLowerCase());
-            
-            console.log('Estimates for', itemName, ':', defaultEstimates);
-
-            // Add to list with estimates already loaded
+            // Add to list with loading state
             shoppingList.push({
                 name: itemName.trim(),
-                estimateMin: defaultEstimates.min,
-                estimateMax: defaultEstimates.max,
-                status: 'pending'
+                estimateMin: null,
+                estimateMax: null,
+                status: 'pending',
+                loading: true
             });
 
             saveList();
             displayShoppingList();
+
+            // Get REAL AI estimate using Claude API
+            try {
+                const index = shoppingList.length - 1;
+                
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        itemName: itemName.trim(),
+                        location: currentLocation,
+                        textOnly: true
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('AI estimate for', itemName, ':', result);
+                    
+                    if (shoppingList[index]) {
+                        shoppingList[index].estimateMin = result.priceRange?.min || 10000;
+                        shoppingList[index].estimateMax = result.priceRange?.max || 50000;
+                        shoppingList[index].loading = false;
+                        saveList();
+                        displayShoppingList();
+                    }
+                } else {
+                    // Fallback on API error
+                    console.error('API failed, using fallback');
+                    const fallback = getDefaultEstimate(itemName.trim().toLowerCase());
+                    if (shoppingList[index]) {
+                        shoppingList[index].estimateMin = fallback.min;
+                        shoppingList[index].estimateMax = fallback.max;
+                        shoppingList[index].loading = false;
+                        saveList();
+                        displayShoppingList();
+                    }
+                }
+            } catch (error) {
+                console.error('Error getting estimate:', error);
+                // Fallback on error
+                const index = shoppingList.length - 1;
+                const fallback = getDefaultEstimate(itemName.trim().toLowerCase());
+                if (shoppingList[index]) {
+                    shoppingList[index].estimateMin = fallback.min;
+                    shoppingList[index].estimateMax = fallback.max;
+                    shoppingList[index].loading = false;
+                    saveList();
+                    displayShoppingList();
+                }
+            }
         }
 
         function getDefaultEstimate(itemName) {
