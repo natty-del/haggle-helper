@@ -84,7 +84,7 @@
         /* Swipe Container */
         .swipe-container {
             height: 100vh;
-            width: 500vw;
+            width: 400vw;
             display: flex;
             transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             touch-action: pan-y;
@@ -147,12 +147,12 @@
 
         /* Cards */
         .card {
-            background: rgba(10, 22, 40, 0.35);
-            backdrop-filter: blur(20px);
+            background: rgba(10, 22, 40, 0.5);
+            backdrop-filter: blur(15px);
             border-radius: 16px;
             padding: 1.25rem;
             margin-bottom: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         /* Bottom Navigation */
@@ -282,9 +282,9 @@
         }
 
         .leaderboard-item {
-            background: rgba(10, 22, 40, 0.4);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(10, 22, 40, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             padding: 1rem;
             margin-bottom: 0.75rem;
@@ -294,9 +294,9 @@
         }
 
         .leaderboard-item.you {
-            background: rgba(255, 107, 53, 0.25);
+            background: rgba(255, 107, 53, 0.3);
             border-color: rgba(255, 107, 53, 0.5);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(15px);
         }
 
         .rank {
@@ -361,9 +361,9 @@
         }
 
         .stat-card {
-            background: rgba(10, 22, 40, 0.35);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(10, 22, 40, 0.55);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             padding: 1rem;
             text-align: center;
@@ -397,9 +397,9 @@
         }
 
         .badge-item {
-            background: rgba(10, 22, 40, 0.35);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(10, 22, 40, 0.55);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             padding: 1rem;
             text-align: center;
@@ -440,71 +440,15 @@
         }
 
         .list-item {
-            background: rgba(10, 22, 40, 0.35);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(10, 22, 40, 0.55);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             padding: 1rem;
             margin-bottom: 0.75rem;
-        }
-
-        .list-item-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 0.75rem;
-        }
-
-        .list-item-info {
-            flex: 1;
-        }
-
-        .list-item-name {
-            font-weight: 600;
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .list-item-price {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .list-item-buttons {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.75rem;
-        }
-
-        .list-item-buttons button {
-            flex: 1;
-            padding: 0.75rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-
-        .bought-btn {
-            background: linear-gradient(135deg, #4CD964, #34C759);
-            color: white;
-        }
-
-        .bought-btn:active {
-            transform: scale(0.95);
-        }
-
-        .skip-btn {
-            background: rgba(255, 59, 48, 0.2);
-            border: 1px solid rgba(255, 59, 48, 0.4);
-            color: #ff3b30;
-        }
-
-        .skip-btn:active {
-            transform: scale(0.95);
-            background: rgba(255, 59, 48, 0.3);
+            align-items: center;
         }
 
         .list-item-info {
@@ -599,80 +543,6 @@
             color: var(--bg-primary);
             font-weight: 700;
             cursor: pointer;
-        }
-
-        /* Price Modal */
-        .price-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 4000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-
-        .price-modal {
-            background: rgba(10, 22, 40, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            padding: 2rem;
-            max-width: 400px;
-            width: 100%;
-        }
-
-        .price-modal h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .price-modal .estimate {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-        }
-
-        .price-modal input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 1rem;
-            color: white;
-            font-size: 1.5rem;
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .price-modal-buttons {
-            display: flex;
-            gap: 0.75rem;
-        }
-
-        .price-modal-buttons button {
-            flex: 1;
-            padding: 0.875rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .save-price-btn {
-            background: linear-gradient(135deg, #4CD964, #34C759);
-            color: white;
-        }
-
-        .skip-price-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         /* Guides Section */
@@ -793,30 +663,9 @@
         }
 
         /* Loading & Error States */
-        .loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 5000;
-        }
-
-        .error {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 59, 48, 0.95);
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            max-width: 90%;
+        .loading, .error {
             text-align: center;
-            z-index: 5001;
+            padding: 2rem;
         }
 
         .hidden {
@@ -989,11 +838,7 @@
             <div class="screen-content">
                 <div class="header">
                     <h1>Shopping List</h1>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <div class="header-icon" id="loadListBtn">📂</div>
-                        <div class="header-icon" id="saveListBtn">💾</div>
-                        <div class="header-icon" id="clearListBtn">🗑️</div>
-                    </div>
+                    <div class="header-icon" id="clearListBtn">🗑️</div>
                 </div>
 
                 <!-- Add Item Form -->
@@ -1017,11 +862,6 @@
                 <!-- Shopping List Items -->
                 <div id="shoppingListItems">
                     <!-- Populated by JavaScript -->
-                </div>
-
-                <!-- Hint -->
-                <div id="listHint" style="text-align: center; padding: 1rem; color: var(--text-secondary); font-size: 0.85rem;">
-                    💡 Tap once to check off • Tap again to enter price
                 </div>
 
                 <!-- Total -->
@@ -1136,31 +976,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- SCREEN 5: ADMIN QUICK SCAN -->
-        <div class="screen" id="adminScreen" style="display: none;">
-            <div class="screen-content">
-                <div class="header">
-                    <h1>⚡ Quick Scan</h1>
-                    <div class="header-icon" id="adminHelpBtn">ℹ️</div>
-                </div>
-
-                <div class="card" style="text-align: center; margin-bottom: 2rem;">
-                    <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Admin Mode</div>
-                    <div style="font-size: 1.5rem; font-weight: 700;">Gold-Tier Data Collection</div>
-                </div>
-
-                <button class="scan-btn" id="adminScanBtn" style="margin-bottom: 1.5rem;">
-                    <div class="scan-icon">⚡</div>
-                    <div>QUICK SCAN</div>
-                </button>
-
-                <div id="adminScans" style="margin-top: 1.5rem;">
-                    <div class="section-title">Today's Scans (<span id="adminScanCount">0</span>)</div>
-                    <div id="adminScansList"></div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Bottom Navigation -->
@@ -1188,19 +1003,9 @@
 
     <!-- Loading Indicator -->
     <div id="loading" class="loading hidden">
-        <div style="background: rgba(0, 0, 0, 0.95); border-radius: 20px; padding: 3rem 2rem; text-align: center; max-width: 300px;">
-            <div style="font-size: 4rem; margin-bottom: 1rem; animation: spin 2s linear infinite;">⏳</div>
-            <div style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;">Analyzing...</div>
-            <div style="font-size: 0.9rem; color: var(--text-secondary);" id="loadingStatus">Please wait</div>
-        </div>
+        <div style="font-size: 3rem; margin-bottom: 1rem;">⏳</div>
+        <div>Analyzing item...</div>
     </div>
-
-    <style>
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-    </style>
 
     <!-- Error Display -->
     <div id="error" class="error hidden"></div>
@@ -1266,7 +1071,6 @@
         let currentPhotoData = null;
         let currentScanId = null; // For tracking scan-to-submission
         let shoppingList = JSON.parse(localStorage.getItem('shoppingList') || '[]');
-        let savedLists = JSON.parse(localStorage.getItem('savedLists') || '[]');
 
         // Fake leaders
         const fakeLeaders = [
@@ -1342,17 +1146,10 @@
                 item.classList.toggle('active', index === screenIndex);
             });
 
-            // Show/hide admin screen based on admin mode
-            const adminScreen = document.getElementById('adminScreen');
-            if (adminScreen) {
-                adminScreen.style.display = adminMode ? 'block' : 'none';
-            }
-
             // Load screen data when navigating
             if (screenIndex === 0) loadLeaderboard('volume');
             if (screenIndex === 2) displayShoppingList();
             if (screenIndex === 3) loadProfileStats();
-            if (screenIndex === 4 && adminMode) loadAdminScans();
         }
 
         // Touch handling
@@ -1370,14 +1167,12 @@
             const diff = touchStartX - touchEndX;
 
             if (Math.abs(diff) > swipeThreshold) {
-                const maxScreen = adminMode ? 4 : 3; // 5 screens if admin, 4 if not
-                
                 if (diff > 0) {
                     // Swipe left (next screen)
-                    if (currentScreen < maxScreen) {
+                    if (currentScreen < 3) {
                         goToScreen(currentScreen + 1);
                     } else {
-                        // Loop back to leaderboard
+                        // At profile (screen 3), loop back to leaderboard (screen 0)
                         goToScreen(0);
                     }
                 } else if (diff < 0) {
@@ -1385,8 +1180,8 @@
                     if (currentScreen > 0) {
                         goToScreen(currentScreen - 1);
                     } else {
-                        // Loop to last screen
-                        goToScreen(maxScreen);
+                        // At leaderboard (screen 0), loop to profile (screen 3)
+                        goToScreen(3);
                     }
                 }
             }
@@ -1642,11 +1437,6 @@
         function displayShoppingList() {
             const container = document.getElementById('shoppingListItems');
             
-            if (!container) {
-                console.error('Shopping list container not found');
-                return;
-            }
-            
             if (shoppingList.length === 0) {
                 container.innerHTML = `
                     <div class="empty-list">
@@ -1659,283 +1449,66 @@
                 return;
             }
 
-            container.innerHTML = shoppingList.map((item, index) => {
-                let priceDisplay = '';
-                
-                if (item.loading) {
-                    priceDisplay = '⏳ Getting AI estimate...';
-                } else if (item.estimateMin && item.estimateMax && !item.noData) {
-                    priceDisplay = `${item.estimateMin.toLocaleString()} - ${item.estimateMax.toLocaleString()} VND`;
-                } else if (item.noData) {
-                    if (item.errorMessage) {
-                        priceDisplay = `⚠️ ${item.errorMessage} - Check console (F12)`;
-                    } else {
-                        priceDisplay = '📊 Scan item in-store to add price data';
-                    }
-                } else {
-                    priceDisplay = '📊 Scan item in-store to add price data';
-                }
-                
-                return `
-                    <div class="list-item ${item.status === 'checked' ? 'checked' : ''}" 
-                         id="item-${index}" 
-                         onclick="toggleListItem(${index})"
-                         style="cursor: pointer; transition: all 0.3s;">
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <div style="font-size: 1.5rem; min-width: 30px;">
-                                ${item.status === 'checked' ? '✓' : '○'}
-                            </div>
-                            <div style="flex: 1; ${item.status === 'checked' ? 'text-decoration: line-through; opacity: 0.5;' : ''}">
-                                <div style="font-weight: 600; margin-bottom: 0.25rem;">${item.name}</div>
-                                <div style="font-size: 0.85rem; color: ${item.noData || item.errorMessage ? '#ff6b35' : 'var(--text-secondary)'};">
-                                    ${priceDisplay}
-                                </div>
-                            </div>
+            container.innerHTML = shoppingList.map((item, index) => `
+                <div class="list-item">
+                    <div class="list-item-info">
+                        <div class="list-item-name">${item.name}</div>
+                        <div class="list-item-price">
+                            ${item.estimateMin && item.estimateMax 
+                                ? `${item.estimateMin.toLocaleString()} - ${item.estimateMax.toLocaleString()} VND`
+                                : 'Getting price...'}
                         </div>
                     </div>
-                `;
-            }).join('');
+                    <div class="list-item-remove" onclick="removeFromList(${index})">✕</div>
+                </div>
+            `).join('');
 
             updateListTotal();
-            const totalSection = document.getElementById('listTotalSection');
-            if (totalSection) {
-                // Only show total if we have at least some real prices
-                const hasRealPrices = shoppingList.some(item => item.estimateMin && item.estimateMax && !item.noData);
-                if (hasRealPrices) {
-                    totalSection.classList.remove('hidden');
-                } else {
-                    totalSection.classList.add('hidden');
-                }
-            }
-        }
-
-        function toggleListItem(index) {
-            const item = shoppingList[index];
-            if (!item) return;
-
-            if (!item.status || item.status === 'pending') {
-                // First tap - check it off
-                item.status = 'checked';
-                saveList();
-                displayShoppingList();
-            } else if (item.status === 'checked') {
-                // Second tap - show price modal
-                showPriceModal(index);
-            }
+            document.getElementById('listTotalSection').classList.remove('hidden');
         }
 
         async function addItemToList(itemName) {
             if (!itemName || !itemName.trim()) return;
 
-            console.log('🛒 Adding item to list:', itemName);
-            console.log('📍 Location:', currentLocation);
-
             // Add to list with loading state
             shoppingList.push({
                 name: itemName.trim(),
                 estimateMin: null,
-                estimateMax: null,
-                status: 'pending',
-                loading: true,
-                noData: false
+                estimateMax: null
             });
 
             saveList();
             displayShoppingList();
 
-            // Get REAL AI estimate using Claude API
+            // Get AI price estimate
             try {
-                const index = shoppingList.length - 1;
-                
-                console.log('📡 Calling API for:', itemName);
-                
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         itemName: itemName.trim(),
                         location: currentLocation,
-                        textOnly: true
+                        estimateOnly: true
                     })
                 });
 
-                console.log('📊 API Response status:', response.status);
-
                 if (response.ok) {
                     const result = await response.json();
-                    console.log('✅ AI estimate for', itemName, ':', result);
+                    const index = shoppingList.length - 1;
                     
                     if (shoppingList[index]) {
-                        shoppingList[index].estimateMin = result.priceRange?.min || null;
-                        shoppingList[index].estimateMax = result.priceRange?.max || null;
-                        shoppingList[index].loading = false;
-                        shoppingList[index].noData = !result.priceRange?.min; // Mark if no real data
-                        saveList();
-                        displayShoppingList();
-                    }
-                } else {
-                    // API failed - get error details
-                    const errorText = await response.text();
-                    console.error('❌ API failed for', itemName);
-                    console.error('Status:', response.status);
-                    console.error('Error:', errorText);
-                    
-                    if (shoppingList[index]) {
-                        shoppingList[index].loading = false;
-                        shoppingList[index].noData = true;
-                        shoppingList[index].errorMessage = `API error ${response.status}`;
+                        shoppingList[index].estimateMin = result.priceRange?.min || 0;
+                        shoppingList[index].estimateMax = result.priceRange?.max || 0;
                         saveList();
                         displayShoppingList();
                     }
                 }
             } catch (error) {
-                console.error('💥 Error getting estimate:', error);
-                console.error('Error details:', error.message);
-                
-                // Error - mark as no data (don't use fallback!)
-                const index = shoppingList.length - 1;
-                if (shoppingList[index]) {
-                    shoppingList[index].loading = false;
-                    shoppingList[index].noData = true;
-                    shoppingList[index].errorMessage = error.message;
-                    saveList();
-                    displayShoppingList();
-                }
-            }
-        }
-                // Error - mark as no data (don't use fallback!)
-                const index = shoppingList.length - 1;
-                if (shoppingList[index]) {
-                    shoppingList[index].loading = false;
-                    shoppingList[index].noData = true;
-                    saveList();
-                    displayShoppingList();
-                }
-            }
-        }
-
-        function showPriceModal(index) {
-            const item = shoppingList[index];
-            if (!item) return;
-
-            const midEstimate = item.estimateMin && item.estimateMax 
-                ? Math.round((item.estimateMin + item.estimateMax) / 2)
-                : 0;
-
-            const modalHTML = `
-                <div class="price-modal-overlay" id="priceModalOverlay">
-                    <div class="price-modal">
-                        <h3>${item.name}</h3>
-                        <div class="estimate">Est: ${item.estimateMin?.toLocaleString() || '?'} - ${item.estimateMax?.toLocaleString() || '?'} VND</div>
-                        
-                        <input type="number" 
-                            id="priceInput" 
-                            value="${midEstimate}"
-                            inputmode="numeric"
-                            placeholder="Price paid">
-                        
-                        <div class="price-modal-buttons">
-                            <button class="save-price-btn" onclick="savePricePaid(${index})">✓ Save Price</button>
-                            <button class="skip-price-btn" onclick="skipPriceEntry(${index})">→ Skip</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
-            
-            // Auto-select input for quick edit
-            setTimeout(() => {
-                const input = document.getElementById('priceInput');
-                if (input) input.select();
-            }, 100);
-        }
-
-        function savePricePaid(index) {
-            const input = document.getElementById('priceInput');
-            const price = input ? parseFloat(input.value) : null;
-            
-            markItemBought(index, price);
-            closePriceModal();
-        }
-
-        function skipPriceEntry(index) {
-            markItemBought(index, null); // Bought but no price
-            closePriceModal();
-        }
-
-        function closePriceModal() {
-            const modal = document.getElementById('priceModalOverlay');
-            if (modal) modal.remove();
-        }
-
-        async function markItemBought(index, pricePaid) {
-            const item = shoppingList[index];
-            if (!item) return;
-
-            // Save to Firebase as bought
-            try {
-                await addDoc(collection(db, 'shopping_sessions'), {
-                    timestamp: new Date().toISOString(),
-                    user_id: userId,
-                    location_city: currentLocation,
-                    item_name: item.name,
-                    estimate_min: item.estimateMin,
-                    estimate_max: item.estimateMax,
-                    status: 'bought',
-                    price_paid: pricePaid,
-                    scan_source: 'shopping_list'
-                });
-            } catch (error) {
-                console.error('Firebase save error:', error);
-            }
-
-            // Remove from list
-            shoppingList.splice(index, 1);
-            saveList();
-            displayShoppingList();
-        }
-
-        async function skipListItem(index) {
-            const item = shoppingList[index];
-            if (!item) return;
-
-            // Save to Firebase as skipped
-            try {
-                await addDoc(collection(db, 'shopping_sessions'), {
-                    timestamp: new Date().toISOString(),
-                    user_id: userId,
-                    location_city: currentLocation,
-                    item_name: item.name,
-                    estimate_min: item.estimateMin,
-                    estimate_max: item.estimateMax,
-                    status: 'skipped',
-                    price_paid: null,
-                    scan_source: 'shopping_list'
-                });
-            } catch (error) {
-                console.error('Firebase save error:', error);
-            }
-
-            // Remove from list with animation
-            const element = document.getElementById(`item-${index}`);
-            if (element) {
-                element.style.transform = 'translateX(-120%)';
-                element.style.opacity = '0';
-                setTimeout(() => {
-                    shoppingList.splice(index, 1);
-                    saveList();
-                    displayShoppingList();
-                }, 200);
-            } else {
-                shoppingList.splice(index, 1);
-                saveList();
-                displayShoppingList();
+                console.error('Error getting estimate:', error);
             }
         }
 
         function removeFromList(index) {
-            // Old function for manual remove (if needed)
             shoppingList.splice(index, 1);
             saveList();
             displayShoppingList();
@@ -2042,384 +1615,9 @@
 
         document.getElementById('photoListBtn').addEventListener('click', scanListPhoto);
         document.getElementById('clearListBtn').addEventListener('click', clearList);
-        document.getElementById('saveListBtn').addEventListener('click', showSaveListModal);
-        document.getElementById('loadListBtn').addEventListener('click', showLoadListModal);
-
-        // Save/Load Lists System
-        function showSaveListModal() {
-            const modalHTML = `
-                <div class="price-modal-overlay" id="saveListModal">
-                    <div class="price-modal">
-                        <h3>💾 Save Shopping List</h3>
-                        <div style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
-                            ${shoppingList.length} items on current list
-                        </div>
-                        
-                        <input type="text" 
-                            id="listNameInput" 
-                            placeholder="e.g., Weekly Groceries"
-                            style="width: 100%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; padding: 1rem; color: white; font-size: 1rem; margin-bottom: 1rem;">
-                        
-                        <div class="price-modal-buttons">
-                            <button class="save-price-btn" onclick="saveCurrentList()">✓ Save List</button>
-                            <button class="skip-price-btn" onclick="closeSaveListModal()">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
-            setTimeout(() => document.getElementById('listNameInput').focus(), 100);
-        }
-
-        function saveCurrentList() {
-            const input = document.getElementById('listNameInput');
-            const listName = input ? input.value.trim() : '';
-            
-            if (!listName) {
-                alert('Please enter a name for this list');
-                return;
-            }
-
-            if (shoppingList.length === 0) {
-                alert('Your list is empty');
-                return;
-            }
-
-            // Save list with timestamp
-            const savedList = {
-                id: Date.now(),
-                name: listName,
-                items: JSON.parse(JSON.stringify(shoppingList)), // Deep copy
-                createdAt: new Date().toISOString(),
-                itemCount: shoppingList.length
-            };
-
-            savedLists.push(savedList);
-            localStorage.setItem('savedLists', JSON.stringify(savedLists));
-            
-            closeSaveListModal();
-            alert(`✅ Saved "${listName}" with ${shoppingList.length} items`);
-        }
-
-        function showLoadListModal() {
-            if (savedLists.length === 0) {
-                alert('No saved lists yet.\n\nSave your current list using the 💾 button.');
-                return;
-            }
-
-            const listsHTML = savedLists.slice().reverse().map((list, index) => {
-                const realIndex = savedLists.length - 1 - index;
-                const date = new Date(list.createdAt).toLocaleDateString();
-                return `
-                    <div class="card" style="margin-bottom: 0.75rem; cursor: pointer;" onclick="loadSavedList(${realIndex})">
-                        <div style="display: flex; justify-content: space-between; align-items: start;">
-                            <div style="flex: 1;">
-                                <div style="font-weight: 700; margin-bottom: 0.25rem;">${list.name}</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary);">
-                                    ${list.itemCount} items • ${date}
-                                </div>
-                            </div>
-                            <button onclick="event.stopPropagation(); deleteSavedList(${realIndex})" 
-                                style="background: rgba(255, 59, 48, 0.2); border: 1px solid rgba(255, 59, 48, 0.4); color: #ff3b30; padding: 0.5rem; border-radius: 6px; cursor: pointer;">
-                                🗑️
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            const modalHTML = `
-                <div class="price-modal-overlay" id="loadListModal">
-                    <div class="price-modal" style="max-height: 80vh; overflow-y: auto;">
-                        <h3>📂 Load Shopping List</h3>
-                        <div style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
-                            Tap a list to load it
-                        </div>
-                        
-                        ${listsHTML}
-                        
-                        <button class="skip-price-btn" onclick="closeLoadListModal()" style="width: 100%; margin-top: 1rem;">
-                            Close
-                        </button>
-                    </div>
-                </div>
-            `;
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
-        }
-
-        function loadSavedList(index) {
-            const list = savedLists[index];
-            if (!list) return;
-
-            if (shoppingList.length > 0) {
-                if (!confirm(`Replace current list (${shoppingList.length} items) with "${list.name}" (${list.itemCount} items)?`)) {
-                    return;
-                }
-            }
-
-            shoppingList = JSON.parse(JSON.stringify(list.items)); // Deep copy
-            saveList();
-            displayShoppingList();
-            closeLoadListModal();
-            
-            alert(`✅ Loaded "${list.name}" with ${list.itemCount} items`);
-        }
-
-        function deleteSavedList(index) {
-            const list = savedLists[index];
-            if (!list) return;
-
-            if (confirm(`Delete "${list.name}"?`)) {
-                savedLists.splice(index, 1);
-                localStorage.setItem('savedLists', JSON.stringify(savedLists));
-                closeLoadListModal();
-                
-                if (savedLists.length > 0) {
-                    showLoadListModal(); // Reopen to show updated list
-                }
-            }
-        }
-
-        function closeSaveListModal() {
-            const modal = document.getElementById('saveListModal');
-            if (modal) modal.remove();
-        }
-
-        function closeLoadListModal() {
-            const modal = document.getElementById('loadListModal');
-            if (modal) modal.remove();
-        }
-
-        // Make functions global
-        window.saveCurrentList = saveCurrentList;
-        window.closeSaveListModal = closeSaveListModal;
-        window.loadSavedList = loadSavedList;
-        window.deleteSavedList = deleteSavedList;
-        window.closeLoadListModal = closeLoadListModal;
 
         // Make removeFromList global
         window.removeFromList = removeFromList;
-        window.savePricePaid = savePricePaid;
-        window.skipPriceEntry = skipPriceEntry;
-        window.showPriceModal = showPriceModal;
-        window.skipListItem = skipListItem;
-        window.toggleListItem = toggleListItem;
-
-        // Admin Quick Scan System
-        let adminScansToday = JSON.parse(localStorage.getItem('adminScansToday') || '[]');
-
-        function loadAdminScans() {
-            const container = document.getElementById('adminScansList');
-            const count = document.getElementById('adminScanCount');
-            
-            if (!container) return;
-            
-            // Filter today's scans
-            const today = new Date().toDateString();
-            adminScansToday = adminScansToday.filter(scan => 
-                new Date(scan.timestamp).toDateString() === today
-            );
-            localStorage.setItem('adminScansToday', JSON.stringify(adminScansToday));
-            
-            count.textContent = adminScansToday.length;
-            
-            if (adminScansToday.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
-                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</div>
-                        <div>No scans yet today</div>
-                        <div style="font-size: 0.85rem; margin-top: 0.5rem;">Tap Quick Scan to start</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = adminScansToday.slice().reverse().map((scan, index) => `
-                <div class="card" style="margin-bottom: 0.75rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                        <div style="flex: 1;">
-                            <div style="font-weight: 700; margin-bottom: 0.25rem;">${scan.item}</div>
-                            <div style="font-size: 0.85rem; color: var(--text-secondary);">
-                                ${scan.price.toLocaleString()} VND
-                            </div>
-                        </div>
-                        <div style="font-size: 0.75rem; color: var(--text-secondary);">
-                            ${new Date(scan.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function adminQuickScan() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.capture = 'environment';
-
-            input.onchange = async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                const reader = new FileReader();
-                reader.onload = async (event) => {
-                    try {
-                        const imageData = event.target.result;
-                        currentPhotoData = imageData;
-                        
-                        // Save as background
-                        localStorage.setItem('lastPhoto', imageData);
-                        lastPhotoData = imageData;
-                        showBackgroundPhoto();
-                        
-                        document.getElementById('loading').classList.remove('hidden');
-
-                        // Analyze with API
-                        const base64Data = imageData.split(',')[1];
-                        const response = await fetch('/api/analyze', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                image: base64Data,
-                                location: currentLocation
-                            })
-                        });
-
-                        if (!response.ok) throw new Error('Analysis failed');
-
-                        const result = await response.json();
-                        
-                        document.getElementById('loading').classList.add('hidden');
-                        
-                        // Show admin price entry modal (no tips, just data)
-                        showAdminPriceModal(result);
-
-                    } catch (error) {
-                        console.error('Admin scan error:', error);
-                        document.getElementById('loading').classList.add('hidden');
-                        alert('Scan failed. Please try again.');
-                    }
-                };
-                reader.readAsDataURL(file);
-            };
-
-            input.click();
-        }
-
-        function showAdminPriceModal(itemData) {
-            const modalHTML = `
-                <div class="price-modal-overlay" id="adminPriceModal">
-                    <div class="price-modal">
-                        <h3>⚡ ${itemData.item}</h3>
-                        <div class="estimate" style="margin-bottom: 1.5rem;">Gold-Tier Data Entry</div>
-                        
-                        <div style="margin-bottom: 1rem;">
-                            <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">Actual Price</label>
-                            <input type="number" 
-                                id="adminPriceInput" 
-                                inputmode="numeric"
-                                placeholder="Enter exact price"
-                                style="width: 100%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; padding: 1rem; color: white; font-size: 1.5rem; text-align: center; margin-bottom: 1rem;">
-                        </div>
-                        
-                        <div class="price-modal-buttons">
-                            <button class="save-price-btn" onclick="saveAdminScan()">✓ Save to Baseline</button>
-                            <button class="skip-price-btn" onclick="closeAdminPriceModal()">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
-            
-            // Store current item data
-            window.currentAdminItem = itemData;
-            
-            // Auto-focus input
-            setTimeout(() => {
-                const input = document.getElementById('adminPriceInput');
-                if (input) input.focus();
-            }, 100);
-        }
-
-        async function saveAdminScan() {
-            const input = document.getElementById('adminPriceInput');
-            const price = input ? parseFloat(input.value) : null;
-            
-            if (!price || price <= 0) {
-                alert('Please enter a valid price');
-                return;
-            }
-
-            const itemData = window.currentAdminItem;
-            if (!itemData) return;
-
-            try {
-                // Save to Firebase as gold-tier baseline data
-                await addDoc(collection(db, 'scans'), {
-                    timestamp: new Date().toISOString(),
-                    event_type: 'scan',
-                    
-                    // Item
-                    item_name: itemData.item,
-                    item_description: itemData.description || '',
-                    
-                    // Price
-                    price_paid: price,
-                    user_submitted: true,
-                    submission_timestamp: new Date().toISOString(),
-                    
-                    // Location
-                    location_city: currentLocation,
-                    latitude: currentCoords ? Math.round(currentCoords.lat * 100) / 100 : null,
-                    longitude: currentCoords ? Math.round(currentCoords.lon * 100) / 100 : null,
-                    
-                    // Data quality (GOLD)
-                    data_source: 'admin',
-                    data_tier: 'gold',
-                    
-                    // User
-                    user_id: userId,
-                    username: userName || 'Admin',
-                    
-                    // Source
-                    scan_source: 'admin_quick_scan'
-                });
-
-                // Add to today's list
-                adminScansToday.push({
-                    item: itemData.item,
-                    price: price,
-                    timestamp: new Date().toISOString()
-                });
-                localStorage.setItem('adminScansToday', JSON.stringify(adminScansToday));
-
-                closeAdminPriceModal();
-                
-                // Show success feedback
-                alert(`✅ Saved: ${itemData.item} - ${price.toLocaleString()} VND\n(Gold-tier baseline data)`);
-                
-                // Reload admin scans list
-                loadAdminScans();
-
-            } catch (error) {
-                console.error('Admin save error:', error);
-                alert('Failed to save. Please try again.');
-            }
-        }
-
-        function closeAdminPriceModal() {
-            const modal = document.getElementById('adminPriceModal');
-            if (modal) modal.remove();
-            window.currentAdminItem = null;
-        }
-
-        // Admin scan button
-        document.getElementById('adminScanBtn').addEventListener('click', adminQuickScan);
-
-        // Make admin functions global
-        window.saveAdminScan = saveAdminScan;
-        window.closeAdminPriceModal = closeAdminPriceModal;
 
         // Admin mode (triple tap logo)
         document.getElementById('logoTap').addEventListener('click', () => {
@@ -2434,16 +1632,7 @@
             if (logoTapCount === 3) {
                 adminMode = !adminMode;
                 document.getElementById('adminStatus').textContent = adminMode ? 'ON ✅' : 'OFF';
-                
-                // Show/hide admin screen
-                const adminScreen = document.getElementById('adminScreen');
-                if (adminScreen) {
-                    adminScreen.style.display = adminMode ? 'block' : 'none';
-                }
-                
-                alert(adminMode 
-                    ? '🔑 Admin Mode Enabled\n\n⚡ Quick Scan screen unlocked\nSwipe past Profile to access\n\nYour scans = Gold-tier baseline data' 
-                    : 'Admin Mode Disabled');
+                alert(adminMode ? '🔑 Admin Mode Enabled\n\nYour scans = Gold Standard data' : 'Admin Mode Disabled');
                 logoTapCount = 0;
             }
         });
@@ -2469,16 +1658,10 @@
 
         // Analyze item
         async function analyzeItem(imageData) {
-            const loadingEl = document.getElementById('loading');
-            const statusEl = document.getElementById('loadingStatus');
-            
-            loadingEl.classList.remove('hidden');
-            if (statusEl) statusEl.textContent = 'Uploading image...';
+            document.getElementById('loading').classList.remove('hidden');
 
             try {
                 const base64Data = imageData.split(',')[1];
-                
-                if (statusEl) statusEl.textContent = 'Analyzing with AI...';
                 
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
@@ -2489,41 +1672,23 @@
                     })
                 });
 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('API Error:', errorText);
-                    throw new Error(`Analysis failed: ${response.status}`);
-                }
-
-                if (statusEl) statusEl.textContent = 'Getting price estimates...';
+                if (!response.ok) throw new Error('Analysis failed');
 
                 const result = await response.json();
-                
-                console.log('API Result:', result); // Debug log
-                
                 result._photoHash = simpleHash(imageData.substring(0, 1000));
                 currentItemData = result;
-                
-                if (statusEl) statusEl.textContent = 'Saving scan data...';
                 
                 // PRIORITY 1: Track scan immediately (even without submission)
                 await trackScan(result);
                 
-                if (statusEl) statusEl.textContent = 'Done!';
-                
                 displayResult(result);
 
             } catch (error) {
-                console.error('Analysis Error:', error);
-                document.getElementById('error').textContent = `Could not analyze: ${error.message}. Please try again.`;
+                console.error('Error:', error);
+                document.getElementById('error').textContent = 'Could not analyze. Try again.';
                 document.getElementById('error').classList.remove('hidden');
-                
-                // Hide error after 5 seconds
-                setTimeout(() => {
-                    document.getElementById('error').classList.add('hidden');
-                }, 5000);
             } finally {
-                loadingEl.classList.add('hidden');
+                document.getElementById('loading').classList.add('hidden');
             }
         }
 
@@ -2735,11 +1900,7 @@
         // Leaderboard
         async function loadLeaderboard(type = 'volume') {
             try {
-                console.log('Loading leaderboard...', type);
-                
                 const allSubmissions = await getDocs(collection(db, 'price_submissions'));
-                console.log('Submissions loaded:', allSubmissions.size);
-                
                 const userStats = {};
                 
                 allSubmissions.forEach(doc => {
@@ -2774,7 +1935,6 @@
                 });
                 
                 let allUsers = [...Object.values(userStats), ...fakeLeaders];
-                console.log('Total users (real + fake):', allUsers.length);
                 
                 if (type === 'volume') {
                     allUsers.sort((a, b) => b.count - a.count);
@@ -2788,16 +1948,6 @@
                 
             } catch (error) {
                 console.error('Error loading leaderboard:', error);
-                const container = document.getElementById('volumeLeaderboard');
-                if (container) {
-                    container.innerHTML = `
-                        <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
-                            <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
-                            <div>Could not load leaderboard</div>
-                            <div style="font-size: 0.85rem; margin-top: 0.5rem;">${error.message}</div>
-                        </div>
-                    `;
-                }
             }
         }
 
