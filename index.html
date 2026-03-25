@@ -1659,30 +1659,42 @@
                 return;
             }
 
-            container.innerHTML = shoppingList.map((item, index) => `
-                <div class="list-item ${item.status === 'checked' ? 'checked' : ''}" 
-                     id="item-${index}" 
-                     onclick="toggleListItem(${index})"
-                     style="cursor: pointer; transition: all 0.3s;">
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <div style="font-size: 1.5rem; min-width: 30px;">
-                            ${item.status === 'checked' ? '✓' : '○'}
-                        </div>
-                        <div style="flex: 1; ${item.status === 'checked' ? 'text-decoration: line-through; opacity: 0.5;' : ''}">
-                            <div style="font-weight: 600; margin-bottom: 0.25rem;">${item.name}</div>
-                            <div style="font-size: 0.85rem; color: ${item.noData ? '#ff6b35' : 'var(--text-secondary)'};">
-                                ${item.loading 
-                                    ? '⏳ Getting AI estimate...'
-                                    : item.noData
-                                        ? '📊 Scan item in-store to add price data'
-                                        : item.estimateMin && item.estimateMax 
-                                            ? `${item.estimateMin.toLocaleString()} - ${item.estimateMax.toLocaleString()} VND`
-                                            : '📊 Scan item in-store to add price data'}
+            container.innerHTML = shoppingList.map((item, index) => {
+                let priceDisplay = '';
+                
+                if (item.loading) {
+                    priceDisplay = '⏳ Getting AI estimate...';
+                } else if (item.estimateMin && item.estimateMax && !item.noData) {
+                    priceDisplay = `${item.estimateMin.toLocaleString()} - ${item.estimateMax.toLocaleString()} VND`;
+                } else if (item.noData) {
+                    if (item.errorMessage) {
+                        priceDisplay = `⚠️ ${item.errorMessage} - Check console (F12)`;
+                    } else {
+                        priceDisplay = '📊 Scan item in-store to add price data';
+                    }
+                } else {
+                    priceDisplay = '📊 Scan item in-store to add price data';
+                }
+                
+                return `
+                    <div class="list-item ${item.status === 'checked' ? 'checked' : ''}" 
+                         id="item-${index}" 
+                         onclick="toggleListItem(${index})"
+                         style="cursor: pointer; transition: all 0.3s;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="font-size: 1.5rem; min-width: 30px;">
+                                ${item.status === 'checked' ? '✓' : '○'}
+                            </div>
+                            <div style="flex: 1; ${item.status === 'checked' ? 'text-decoration: line-through; opacity: 0.5;' : ''}">
+                                <div style="font-weight: 600; margin-bottom: 0.25rem;">${item.name}</div>
+                                <div style="font-size: 0.85rem; color: ${item.noData || item.errorMessage ? '#ff6b35' : 'var(--text-secondary)'};">
+                                    ${priceDisplay}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             updateListTotal();
             const totalSection = document.getElementById('listTotalSection');
@@ -1715,7 +1727,8 @@
         async function addItemToList(itemName) {
             if (!itemName || !itemName.trim()) return;
 
-            console.log('Adding item to list:', itemName);
+            console.log('🛒 Adding item to list:', itemName);
+            console.log('📍 Location:', currentLocation);
 
             // Add to list with loading state
             shoppingList.push({
@@ -1734,6 +1747,8 @@
             try {
                 const index = shoppingList.length - 1;
                 
+                console.log('📡 Calling API for:', itemName);
+                
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1744,9 +1759,11 @@
                     })
                 });
 
+                console.log('📊 API Response status:', response.status);
+
                 if (response.ok) {
                     const result = await response.json();
-                    console.log('AI estimate for', itemName, ':', result);
+                    console.log('✅ AI estimate for', itemName, ':', result);
                     
                     if (shoppingList[index]) {
                         shoppingList[index].estimateMin = result.priceRange?.min || null;
@@ -1757,17 +1774,35 @@
                         displayShoppingList();
                     }
                 } else {
-                    // API failed - mark as no data (don't use fallback!)
-                    console.error('API failed for', itemName);
+                    // API failed - get error details
+                    const errorText = await response.text();
+                    console.error('❌ API failed for', itemName);
+                    console.error('Status:', response.status);
+                    console.error('Error:', errorText);
+                    
                     if (shoppingList[index]) {
                         shoppingList[index].loading = false;
                         shoppingList[index].noData = true;
+                        shoppingList[index].errorMessage = `API error ${response.status}`;
                         saveList();
                         displayShoppingList();
                     }
                 }
             } catch (error) {
-                console.error('Error getting estimate:', error);
+                console.error('💥 Error getting estimate:', error);
+                console.error('Error details:', error.message);
+                
+                // Error - mark as no data (don't use fallback!)
+                const index = shoppingList.length - 1;
+                if (shoppingList[index]) {
+                    shoppingList[index].loading = false;
+                    shoppingList[index].noData = true;
+                    shoppingList[index].errorMessage = error.message;
+                    saveList();
+                    displayShoppingList();
+                }
+            }
+        }
                 // Error - mark as no data (don't use fallback!)
                 const index = shoppingList.length - 1;
                 if (shoppingList[index]) {
